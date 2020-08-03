@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="QTest.Views.MotherboardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QTest.Views"
+        mc:Ignorable="d"
+        d:DesignHeight="450" d:DesignWidth="650">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}" x:Key="GridViewColumnStyle" >
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <ListView x:Name="MBListView" BorderThickness="0,0,0,1" BorderBrush="#FFC8CCD4" 
+                  Unloaded="OnUnloaded" Loaded="OnLoaded">
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnStyle}">
+                    <GridViewColumn Header="项目" Width="100" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock x:Name="title" Text="{Binding Path=Name}"/>
+                                </StackPanel>
+                                <!-- 如果Value为空就加粗字体 -->
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Path=Value.Length, FallbackValue=0, TargetNullValue=0}" Value="0">
+                                        <Setter TargetName="title" Property="FontWeight" Value="Bold" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="当前值" Width="500" DisplayMemberBinding="{Binding Path=Value}"  />
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

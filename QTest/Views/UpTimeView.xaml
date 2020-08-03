@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="QTest.Views.UpTimeView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignHeight="450" d:DesignWidth="650">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}" x:Key="GridViewColumnStyle" >
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel VerticalAlignment="Top">
+        <ListView x:Name="uptimeListView" BorderThickness="0,0,0,1" BorderBrush="#FFC8CCD4" >
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnStyle}">
+                    <GridViewColumn Header="项目" Width="150" DisplayMemberBinding="{Binding Path=Name}" />
+                    <GridViewColumn Header="当前值" Width="450" DisplayMemberBinding="{Binding Path=Value}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+            <TextBlock />
+            <TextBlock />
+            <TextBlock Text="上述统计基于系统事件日志而作出"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
