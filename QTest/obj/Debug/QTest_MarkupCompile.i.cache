@@ -16,5 +16,5 @@ E:\Visual Studio\C#\QTest\QTest\App.xaml
 17808576398
 MainWindow.xaml;Views\AudioTestView.xaml;Views\GPIOView.xaml;Views\MotherboardView.xaml;Views\SensorView.xaml;Views\SerialTestView.xaml;Views\SummaryView.xaml;Views\UpTimeView.xaml;Views\WDTView.xaml;
 
-True
+False
 

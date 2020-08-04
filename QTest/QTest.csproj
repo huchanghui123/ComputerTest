@@ -208,5 +208,9 @@
   <ItemGroup>
     <Resource Include="Resources\serial_port.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sun_128px_close.png" />
+    <Resource Include="Resources\sun_128px_open.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\github\ComputerTest\QTest\obj\Debug\
+E:\Visual Studio\C#\QTest\QTest\obj\Debug\
 QTest
 none
 false
 DEBUG;TRACE
-E:\github\ComputerTest\QTest\App.xaml
+E:\Visual Studio\C#\QTest\QTest\App.xaml
 9527227126
 
-31-974356401
-17788711384
+271048144218
+17808576398
 MainWindow.xaml;Views\AudioTestView.xaml;Views\GPIOView.xaml;Views\MotherboardView.xaml;Views\SensorView.xaml;Views\SerialTestView.xaml;Views\SummaryView.xaml;Views\UpTimeView.xaml;Views\WDTView.xaml;
 
-True
+False
 

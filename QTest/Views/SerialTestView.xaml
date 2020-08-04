@@ -5,8 +5,81 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QTest.Views"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Label Content="SerialTestView" />
+        d:DesignHeight="680" d:DesignWidth="640">
+    <Grid Unloaded="OnUnloaded" Loaded="OnLoaded">
+        <Rectangle Width="610" Margin="10,10,0,0" Height="130" HorizontalAlignment="Left" VerticalAlignment="Top" Stroke="Black" />
+        <StackPanel Orientation="Vertical">
+            <Grid Width="610" Margin="10,10,0,0" Height="130" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Height="35">
+                        <TextBlock Text="串　口:" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="16" />
+                        <ComboBox x:Name="portName" Margin="20,0,0,0" Width="100" Height="21" />
+                        <TextBlock Text="波特率:" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                        <ComboBox x:Name="baudRate" Margin="20,0,0,0" Width="100" Height="21" />
+                        <TextBlock Text="数据位:" Margin="26,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                        <ComboBox x:Name="dataBits" Margin="20,0,0,0" Width="100" Height="21" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="35">
+                        <TextBlock Text="停止位:" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="16" />
+                        <ComboBox x:Name="stopBits" Margin="20,0,0,0" Width="100" Height="21"/>
+                        <TextBlock Text="校验位:" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                        <ComboBox x:Name="parity" Margin="20,0,0,0" Width="100" Height="21" />
+                        <TextBlock Text="握手方式:" Margin="20,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                        <ComboBox x:Name="handShake" Margin="10,0,0,0" Width="100" Height="21"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/QTest;component/Resources/sun_128px_close.png" Margin="20,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <StackPanel Orientation="Vertical" Margin="10">
+                            <CheckBox x:Name="rtsBox" Content="RTS" Margin="5,0,0,0"/>
+                            <CheckBox x:Name="dtrBox" Content="RTS" Margin="5,5,0,0" />
+                        </StackPanel>
+                        <Button Click="OpenSerialPort_Click" Content="打开串口" Width="100" Margin="30,0,0,0" FontSize="20" FontFamily="Arial Black" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Button Click="CloseSerialPort_Click" Content="关闭串口" Width="100" Margin="30,0,0,0" FontSize="20" FontFamily="Arial Black" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Button Click="OpenAllSerialPort_Click" Content="打开全部串口"  Width="150" Margin="30,0,0,0" FontSize="20" FontFamily="Arial Black" HorizontalAlignment="Right" VerticalAlignment="Center" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <Grid Width="610" Height="360" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <CheckBox x:Name="brBox" Content="换行" VerticalAlignment="Center" Margin="10,0,0,0" />
+                        <RadioButton x:Name="hexRadio" Content="Hex" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <RadioButton x:Name="ascRadio" Content="ASCII" IsChecked="True" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Text="接收字节：" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock x:Name="recevierText" Text="占位" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBox x:Name="recevier" Height="280" Margin="0,10,0,0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Button Content="Clear" Width="80" Height="21" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <CheckBox Content="Hex out" Margin="20,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="False" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <Grid Width="610" Height="120" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical">
+                    <TextBox x:Name="sendText" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Clear" Width="80" Height="21" Margin="10" />
+                        <Button Content="Send" Width="80" Height="21" Margin="10" />
+                        <TextBlock Text="Char delay(ms):" Margin="250,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBox Text="ms" Width="50" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+            <Grid Width="610" Height="35"  Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Rectangle Width="610" Height="35" Stroke="Black"  HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <TextBlock Text="CTS" Margin="10,0,0,0"/>
+                    <TextBlock x:Name="ctsStatus" Width="20" Margin="5,0,0,0" Background="#FF8D8D8D"/>
+                    <TextBlock Text="DSR" Margin="10,0,0,0"/>
+                    <TextBlock x:Name="dsrStatus" Width="20" Margin="5,0,0,0" Background="#FF8D8D8D"/>
+                    <TextBlock Text="DCD" Margin="10,0,0,0"/>
+                    <TextBlock x:Name="dcdStatus" Width="20" Margin="5,0,0,0" Background="#FF8D8D8D"/>
+                    <TextBlock Text="RI" Margin="10,0,0,0"/>
+                    <TextBlock x:Name="riStatus" Width="20" Margin="5,0,0,0" Background="#FF8D8D8D"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
     </Grid>
 </UserControl>

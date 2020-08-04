@@ -7,7 +7,7 @@
         xmlns:models="clr-namespace:QTest.Models"
         xmlns:views="clr-namespace:QTest.Views"
         mc:Ignorable="d"
-        Title="QTest V1.00" Height="800" Width="800" Icon="Resources\no_bomb.ico" Closed="WindowClosed">
+        Title="QTest V1.00" Height="700" Width="800" Icon="Resources\no_bomb.ico" Closed="WindowClosed">
     <Window.Resources>
         <DataTemplate x:Name="summaryTemplate" DataType="{x:Type models:Summary}">
             <views:SummaryView DataContext="{Binding}" />
