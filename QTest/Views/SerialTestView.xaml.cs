@@ -22,6 +22,8 @@ namespace QTest.Views
         private SerialPort serialPort;
         private DispatcherTimer timer;
 
+        private SerialPortWindow spWindow;
+
         public SerialTestView()
         {
             InitializeComponent();
@@ -271,11 +273,6 @@ namespace QTest.Views
             sendBytes.Text = send_count.ToString() + "Bytes";
         }
 
-        private void OpenAllSerialPort_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Console.WriteLine("OpenAllSerialPort_Click");
-        }
-
         private void OnUnloaded(object sender, System.Windows.RoutedEventArgs e)
         {
             Console.WriteLine("OnUnloaded......................");
@@ -283,6 +280,7 @@ namespace QTest.Views
             {
                 serialPort.Close();
             }
+            timer.Stop();
         }
 
         private void EnableButton(string status)
@@ -331,6 +329,24 @@ namespace QTest.Views
                 serialImage.Source = new BitmapImage(
                     new Uri("..\\Resources\\sun_128px_close.png", UriKind.Relative));
             }
+        }
+
+        private void OpenAllSerialPort_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Console.WriteLine("OpenAllSerialPort_Click");
+            if (serialPort.IsOpen)
+            {
+                serialPort.Close();
+                EnableButton("close");
+            }
+            spWindow = new SerialPortWindow(baudRate.Text, dataBits.Text,
+                stopBits.Text, parity.Text, handShake.Text)
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual,
+                Left = 150,
+                Top = 20
+            };
+            spWindow.ShowDialog();
         }
     }
 }

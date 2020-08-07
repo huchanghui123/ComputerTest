@@ -90,6 +90,9 @@
     <Compile Include="Views\SensorView.xaml.cs">
       <DependentUpon>SensorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SerialPortWindow.xaml.cs">
+      <DependentUpon>SerialPortWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SerialTestView.xaml.cs">
       <DependentUpon>SerialTestView.xaml</DependentUpon>
     </Compile>
@@ -127,6 +130,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SensorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SerialPortWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

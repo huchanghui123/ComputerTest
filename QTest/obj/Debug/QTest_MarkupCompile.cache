@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 E:\Visual Studio\C#\QTest\QTest\App.xaml
-9527227126
+101708699172
 
-271048144218
+28-676143285
 17808576398
-MainWindow.xaml;Views\AudioTestView.xaml;Views\GPIOView.xaml;Views\MotherboardView.xaml;Views\SensorView.xaml;Views\SerialTestView.xaml;Views\SummaryView.xaml;Views\UpTimeView.xaml;Views\WDTView.xaml;
+MainWindow.xaml;Views\AudioTestView.xaml;Views\GPIOView.xaml;Views\MotherboardView.xaml;Views\SensorView.xaml;Views\SerialPortWindow.xaml;Views\SerialTestView.xaml;Views\SummaryView.xaml;Views\UpTimeView.xaml;Views\WDTView.xaml;
 
 False
 

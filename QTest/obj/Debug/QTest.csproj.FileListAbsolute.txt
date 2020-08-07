@@ -31,3 +31,5 @@ E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.csproj.CoreCompileInputs.cache
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.csproj.CopyComplete
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.exe
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.pdb
+E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialPortWindow.g.cs
+E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialPortWindow.baml
