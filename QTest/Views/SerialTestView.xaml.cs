@@ -192,27 +192,27 @@ namespace QTest.Views
             SerialPort serialPort1 = sender as SerialPort;
             if (serialPort1.CtsHolding)
             {
-                ctsStatus.Background = Brushes.Green;
+                InvokeUpdateStatePanel(ctsStatus, Brushes.Green);
             }
             else
             {
-                ctsStatus.Background = Brushes.LightGray;
+                InvokeUpdateStatePanel(ctsStatus, Brushes.LightGray);
             }
             if (serialPort1.DsrHolding)
             {
-                dsrStatus.Background = Brushes.Green;
+                InvokeUpdateStatePanel(dsrStatus, Brushes.Green);
             }
             else
             {
-                dsrStatus.Background = Brushes.LightGray;
+                InvokeUpdateStatePanel(dsrStatus, Brushes.LightGray);
             }
             if (serialPort1.CDHolding)
             {
-                dcdStatus.Background = Brushes.Green;
+                InvokeUpdateStatePanel(dcdStatus, Brushes.Green);
             }
             else
             {
-                dcdStatus.Background = Brushes.LightGray;
+                InvokeUpdateStatePanel(dcdStatus, Brushes.LightGray);
             }
         }
 
@@ -329,6 +329,14 @@ namespace QTest.Views
                 serialImage.Source = new BitmapImage(
                     new Uri("..\\Resources\\sun_128px_close.png", UriKind.Relative));
             }
+        }
+
+        private void InvokeUpdateStatePanel(TextBlock tb, SolidColorBrush color)
+        {
+            this.Dispatcher.Invoke((Action)delegate ()
+            {
+                tb.Background = color;
+            });
         }
 
         private void OpenAllSerialPort_Click(object sender, System.Windows.RoutedEventArgs e)

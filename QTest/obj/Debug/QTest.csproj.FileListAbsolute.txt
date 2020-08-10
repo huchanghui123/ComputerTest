@@ -1,7 +1,6 @@
 E:\Visual Studio\C#\QTest\QTest\bin\Debug\QTest.exe.config
 E:\Visual Studio\C#\QTest\QTest\bin\Debug\QTest.exe
 E:\Visual Studio\C#\QTest\QTest\bin\Debug\QTest.pdb
-E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.csprojAssemblyReference.cache
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\GPIOView.baml
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SummaryView.baml
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\UpTimeView.baml
@@ -11,6 +10,7 @@ E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\AudioTestView.g.cs
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\GPIOView.g.cs
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\MotherboardView.g.cs
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SensorView.g.cs
+E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialPortWindow.g.cs
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialTestView.g.cs
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SummaryView.g.cs
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\UpTimeView.g.cs
@@ -23,6 +23,7 @@ E:\Visual Studio\C#\QTest\QTest\obj\Debug\MainWindow.baml
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\AudioTestView.baml
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\MotherboardView.baml
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SensorView.baml
+E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialPortWindow.baml
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialTestView.baml
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.g.resources
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.Properties.Resources.resources
@@ -31,5 +32,3 @@ E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.csproj.CoreCompileInputs.cache
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.csproj.CopyComplete
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.exe
 E:\Visual Studio\C#\QTest\QTest\obj\Debug\QTest.pdb
-E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialPortWindow.g.cs
-E:\Visual Studio\C#\QTest\QTest\obj\Debug\Views\SerialPortWindow.baml
