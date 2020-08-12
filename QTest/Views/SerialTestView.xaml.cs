@@ -34,7 +34,7 @@ namespace QTest.Views
             serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
 
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(1000);
+            timer.Interval = TimeSpan.FromMilliseconds(200);
             timer.IsEnabled = false;
             timer.Tick += Timer_Tick;
         }
@@ -177,6 +177,7 @@ namespace QTest.Views
                         sb.Append("\r\n");
                     }
                     recevierBox.AppendText(sb.ToString());
+                    recevierBox.ScrollToEnd();
                     recevierBytes.Text = receive_count.ToString() + "Bytes";
                 });
             }

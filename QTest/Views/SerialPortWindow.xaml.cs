@@ -42,6 +42,8 @@ namespace QTest.Views
         private String parity = "None";
         private String handshake = "None";
 
+        //测试间隔100毫秒
+        double timeDelay = 100;
         //定时更新检测状态
         TextBlock tb;
         TextBlock cts;
@@ -66,7 +68,7 @@ namespace QTest.Views
 
             timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(200),
+                Interval = TimeSpan.FromMilliseconds(timeDelay),
                 IsEnabled = false
             };
             timer.Tick += Timer_Tick;
@@ -267,7 +269,8 @@ namespace QTest.Views
                 Width = defaultWidth - 20,
                 Height = defaultHeight - 20,
                 TextWrapping = TextWrapping.Wrap,
-                AcceptsReturn = true
+                AcceptsReturn = true,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto
             };
             return tx;
         }
@@ -327,23 +330,23 @@ namespace QTest.Views
             try
             {
                 recevieName = serialPort.PortName;
-                Console.WriteLine("Received:" + recevieName + ":" + serialPort.IsOpen);
                 if(!serialPort.IsOpen)
                 { return; }
                 message = serialPort.ReadLine();
-                Console.WriteLine(recevieName + " Received data:" + message);
+                Console.WriteLine("recevieName:"+ recevieName + " Received data:" + message);
                 sb.Clear();
                 sb.Append(message);
                 this.Dispatcher.BeginInvoke((Action)delegate () {
                     foreach (StackPanel recevie_panel in recevie_panel_list)
                     {
-                        Console.WriteLine("recevieName:{0} recevie_panel name:{1}",
-                            recevieName, recevie_panel.Name);
+                        //Console.WriteLine("recevieName:{0} recevie_panel name:{1}",
+                        //    recevieName, recevie_panel.Name);
                         if (recevieName.Equals(recevie_panel.Name))
                         {
                             TextBox tv = (TextBox)recevie_panel.Children[1];
-                            Console.WriteLine("recevie_panel textBox name:{0}", tv.Name);
+                            //Console.WriteLine("recevie_panel textBox name:{0}", tv.Name);
                             tv.AppendText(sb.ToString());
+                            tv.ScrollToEnd();
                         }
                     }
                 });
@@ -363,8 +366,8 @@ namespace QTest.Views
                 {
                     index = state_panel_list.IndexOf(state_panel);
         
-                    Console.WriteLine("timer tick state panel name:{0} serial port name:{1} serial port state:{2}",
-                        state_panel.Name, serial_list[index].PortName , serial_list[index].IsOpen);
+                    //Console.WriteLine("timer tick state panel name:{0} serial port name:{1} serial port state:{2}",
+                    //    state_panel.Name, serial_list[index].PortName , serial_list[index].IsOpen);
                     if (serial_list[index].IsOpen)
                     {
                         String str = serial_list[index].PortName + "测试中.";

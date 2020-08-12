@@ -4,9 +4,82 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QTest.Views"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:wfi ="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800">
+        d:DesignHeight="500" d:DesignWidth="650" Loaded="Audio_Loaded" Unloaded="Audio_Unloaded">
     <Grid>
-        <Label Content="AudioTestView" />
+        <Rectangle Stroke="Black" Width="280" Height="190" Margin="20,85,0,0" Fill="Transparent"
+                   StrokeDashArray="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Rectangle Stroke="Black" Width="280" Height="190" Margin="330,85,0,0" Fill="Transparent"
+                   StrokeDashArray="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <StackPanel>
+            <ToolBar VerticalAlignment="Top" VerticalContentAlignment="Center">
+                <Button x:Name="openFileBtn" Width="25" Height="23">
+                    <Image Source="../Resources/Open.png"/>
+                </Button>
+                <Button x:Name="playBtn" Width="25" Height="23">
+                    <Image Source="../Resources/Play.png"/>
+                </Button>
+                <Button x:Name="pauseBtn" Width="25" Height="23">
+                    <Image Source="../Resources/Pause.png"/>
+                </Button>
+                <Button x:Name="stopBtn" Width="25" Height="23">
+                    <Image Source="../Resources/Stop.png"/>
+                </Button>
+                <TextBlock Text="Current Time:" VerticalAlignment="Center"/>
+                <TextBlock x:Name="currentTime" Width="100" VerticalAlignment="Center"/>
+                <TextBlock Text="Total Time:" VerticalAlignment="Center"/>
+                <TextBlock x:Name="totalTime" Width="100" VerticalAlignment="Center"/>
+            </ToolBar>
+            <StackPanel Orientation="Horizontal">
+                <GroupBox Header="Output Driver" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Canvas>
+                        <ComboBox x:Name="outBox" Margin="5,5,0,0" Width="280" Text="选择驱动" IsEditable="True" VerticalAlignment="Top"/>
+                        <TextBlock Text="Latency: " Canvas.Left="30" Canvas.Top="50"/>
+                        <ComboBox x:Name="latncyBox" Width="120" IsEditable="True" Canvas.Left="90" Canvas.Top="48" />
+                        <TextBlock Text="ms" Canvas.Left="215" Canvas.Top="50"/>
+                        <TextBlock Text="Volume: " Canvas.Left="30" Canvas.Top="85"/>
+                        <wfi:WindowsFormsHost x:Name="NAudioVolumeSlider" Width="120" Height="15" 
+                                              Canvas.Left="90" Canvas.Top="85">
+                            <!-- 此处为NAudio volumeSlider控件-->
+                        </wfi:WindowsFormsHost>
+                        <RadioButton Content="立体声" Canvas.Left="50" Canvas.Top="130" IsChecked="True" Checked="SolidRadio_Checked" />
+                        <RadioButton Content="左声道" Canvas.Left="50" Canvas.Top="160" Checked="LeftRadio_Checked"/>
+                        <RadioButton Content="右声道" Canvas.Left="50" Canvas.Top="190" Checked="RightRadio_Checked"/>
+                        <wfi:WindowsFormsHost x:Name="NAudioVolumeMeter1" Canvas.Left="150" Canvas.Top="120"
+                                              Width="20" Height="90">
+                            <!-- 此处为NAudio volumeMeter控件-->
+                        </wfi:WindowsFormsHost>
+                        <wfi:WindowsFormsHost x:Name="NAudioVolumeMeter2" Canvas.Left="180" Canvas.Top="120"
+                                              Width="20" Height="90">
+                            <!-- 此处为NAudio volumeMeter控件-->
+                        </wfi:WindowsFormsHost>
+                    </Canvas>
+                </GroupBox>
+                <GroupBox Header="WAV Recording" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray"  VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Canvas>
+                        <ComboBox x:Name="recordBox" Margin="5,5,0,0" Width="280" Text="选择驱动" IsEditable="True" VerticalAlignment="Top"/>
+                        <TextBlock Text="Sample Rate:" Canvas.Left="15" Canvas.Top="45" />
+                        <TextBlock Text="Channels:" Canvas.Left="150" Canvas.Top="45" />
+                        <ComboBox x:Name="rateBox" Width="120" Canvas.Left="15" Canvas.Top="65" IsEditable="True"/>
+                        <ComboBox x:Name="channelBox" Width="120" Canvas.Left="150" Canvas.Top="65"/>
+                        <Button x:Name="startRecordBtn" Content="Start Recording" Width="120" Height="20" Canvas.Left="15" Canvas.Top="100" Click="StartRecordBtn_Click" />
+                        <Button x:Name="stopRecordBtn" Content="Stop Recording" Width="120" Height="20" Canvas.Left="150" Canvas.Top="100" Click="StopRecordBtn_Click" />
+                        <TextBlock Text="Recording Progress:" Canvas.Left="15" Canvas.Top="130" />
+                        <ProgressBar Width="255" Height="20" Canvas.Left="15" Canvas.Top="150" />
+                        <Button Content="Play" Width="50" Canvas.Left="20" Canvas.Top="200" Click="RecordPlay_Click" />
+                        <Button Content="Pause" Width="50" Canvas.Left="85" Canvas.Top="200" Click="RecordPause_Click" />
+                        <Button Content="Open" Width="50" Canvas.Left="150" Canvas.Top="200" Click="RecordOpen_Click" />
+                        <Button Content="Delete" Width="50" Canvas.Left="215" Canvas.Top="200" Click="RecordDelete_Click" />
+                    </Canvas>
+                </GroupBox>
+            </StackPanel>
+            <StackPanel>
+                <wfi:WindowsFormsHost x:Name="NAudioPainter1" Height="80" Margin="10,10,10,0" />
+                <wfi:WindowsFormsHost x:Name="NAudioPainter2" Height="80" Margin="10,10,10,0" />
+                <Slider Margin="10" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

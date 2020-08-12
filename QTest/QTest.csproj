@@ -37,6 +37,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="OpenHardwareMonitorLib, Version=0.8.0.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\OpenHardwareMonitorLib.dll</HintPath>
@@ -58,6 +61,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -173,6 +177,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -218,6 +223,12 @@
   <ItemGroup>
     <Resource Include="Resources\sun_128px_close.png" />
     <Resource Include="Resources\sun_128px_open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Open.png" />
+    <Resource Include="Resources\Pause.png" />
+    <Resource Include="Resources\Play.png" />
+    <Resource Include="Resources\Stop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
