@@ -70,6 +70,7 @@
     </ApplicationDefinition>
     <Compile Include="instances\BaseData.cs" />
     <Compile Include="instances\MainBoardData.cs" />
+    <Compile Include="instances\MyWaveOut.cs" />
     <Compile Include="instances\SensorData.cs" />
     <Compile Include="Models\AudioTest.cs" />
     <Compile Include="Models\GPIOTools.cs" />

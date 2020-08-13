@@ -15,27 +15,28 @@
                    StrokeDashArray="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <StackPanel>
             <ToolBar VerticalAlignment="Top" VerticalContentAlignment="Center">
-                <Button x:Name="openFileBtn" Width="25" Height="23">
+                <Button x:Name="openFileBtn" Width="25" Height="23" Click="OpenFileBtn_Click">
                     <Image Source="../Resources/Open.png"/>
                 </Button>
-                <Button x:Name="playBtn" Width="25" Height="23">
+                <Button x:Name="playBtn" Width="25" Height="23" Click="PlayBtn_Click">
                     <Image Source="../Resources/Play.png"/>
                 </Button>
-                <Button x:Name="pauseBtn" Width="25" Height="23">
+                <Button x:Name="pauseBtn" Width="25" Height="23" Click="PauseBtn_Click">
                     <Image Source="../Resources/Pause.png"/>
                 </Button>
-                <Button x:Name="stopBtn" Width="25" Height="23">
+                <Button x:Name="stopBtn" Width="25" Height="23" Click="StopBtn_Click">
                     <Image Source="../Resources/Stop.png"/>
                 </Button>
-                <TextBlock Text="Current Time:" VerticalAlignment="Center"/>
-                <TextBlock x:Name="currentTime" Width="100" VerticalAlignment="Center"/>
-                <TextBlock Text="Total Time:" VerticalAlignment="Center"/>
-                <TextBlock x:Name="totalTime" Width="100" VerticalAlignment="Center"/>
+                <TextBlock Text="Current Time:" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="current_time" Text="00:00" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Text="Total Time:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="total_time" Text="00:00" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="file_name" Margin="10,0,0,0" VerticalAlignment="Center"/>
             </ToolBar>
             <StackPanel Orientation="Horizontal">
                 <GroupBox Header="Output Driver" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <Canvas>
-                        <ComboBox x:Name="outBox" Margin="5,5,0,0" Width="280" Text="选择驱动" IsEditable="True" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="audioBox" Margin="5,5,0,0" Width="280" IsEditable="True" VerticalAlignment="Top"/>
                         <TextBlock Text="Latency: " Canvas.Left="30" Canvas.Top="50"/>
                         <ComboBox x:Name="latncyBox" Width="120" IsEditable="True" Canvas.Left="90" Canvas.Top="48" />
                         <TextBlock Text="ms" Canvas.Left="215" Canvas.Top="50"/>
@@ -44,9 +45,9 @@
                                               Canvas.Left="90" Canvas.Top="85">
                             <!-- 此处为NAudio volumeSlider控件-->
                         </wfi:WindowsFormsHost>
-                        <RadioButton Content="立体声" Canvas.Left="50" Canvas.Top="130" IsChecked="True" Checked="SolidRadio_Checked" />
-                        <RadioButton Content="左声道" Canvas.Left="50" Canvas.Top="160" Checked="LeftRadio_Checked"/>
-                        <RadioButton Content="右声道" Canvas.Left="50" Canvas.Top="190" Checked="RightRadio_Checked"/>
+                        <RadioButton x:Name="solid_radio" Content="立体声" Canvas.Left="50" Canvas.Top="130" IsChecked="True" Checked="SolidRadio_Checked" />
+                        <RadioButton x:Name="left_radio" Content="左声道" Canvas.Left="50" Canvas.Top="160" Checked="LeftRadio_Checked"/>
+                        <RadioButton x:Name="right_radio" Content="右声道" Canvas.Left="50" Canvas.Top="190" Checked="RightRadio_Checked"/>
                         <wfi:WindowsFormsHost x:Name="NAudioVolumeMeter1" Canvas.Left="150" Canvas.Top="120"
                                               Width="20" Height="90">
                             <!-- 此处为NAudio volumeMeter控件-->
@@ -59,7 +60,7 @@
                 </GroupBox>
                 <GroupBox Header="WAV Recording" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray"  VerticalAlignment="Top" HorizontalAlignment="Left">
                     <Canvas>
-                        <ComboBox x:Name="recordBox" Margin="5,5,0,0" Width="280" Text="选择驱动" IsEditable="True" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="recordBox" Margin="5,5,0,0" Width="280" IsEditable="True" VerticalAlignment="Top"/>
                         <TextBlock Text="Sample Rate:" Canvas.Left="15" Canvas.Top="45" />
                         <TextBlock Text="Channels:" Canvas.Left="150" Canvas.Top="45" />
                         <ComboBox x:Name="rateBox" Width="120" Canvas.Left="15" Canvas.Top="65" IsEditable="True"/>
@@ -78,7 +79,7 @@
             <StackPanel>
                 <wfi:WindowsFormsHost x:Name="NAudioPainter1" Height="80" Margin="10,10,10,0" />
                 <wfi:WindowsFormsHost x:Name="NAudioPainter2" Height="80" Margin="10,10,10,0" />
-                <Slider Margin="10" />
+                <Slider x:Name="slider" Margin="10" SmallChange="1" TickFrequency="5" LargeChange="10" Maximum="100" />
             </StackPanel>
         </StackPanel>
     </Grid>
