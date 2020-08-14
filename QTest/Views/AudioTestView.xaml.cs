@@ -3,6 +3,7 @@ using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using QTest.instances;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -16,24 +17,30 @@ namespace QTest.Views
     /// </summary>
     public partial class AudioTestView : UserControl
     {
+        //音频输出
         private IWavePlayer waveOut;
-        private IWaveIn captureDevice;
-        private WaveFileWriter waveWriter;
         private AudioFileReader audioFileReader;
         private AudioFileReader audioFileReader2;
         private MultiplexingWaveProvider waveProvider;
+        //音频输入
+        private IWaveIn captureDevice;
+        private WaveFileWriter waveWriter;
         private Action<float> setVolumeDelegate;
-
+        //NAudio GUI
         private VolumeSlider volumeSlider;
         private VolumeMeter volumeMeter1;
         private VolumeMeter volumeMeter2;
         private WaveformPainter waveformPainter1;
         private WaveformPainter waveformPainter2;
 
-        private readonly string outputFolder;
+        //录音输出文件名
+        private string outputFilename;
+        private string outputFolder = Path.Combine(System.Windows.Forms.Application.StartupPath, "Recording");
+        //默认加载音频文件
         private string fileName = System.Windows.Forms.Application.StartupPath + "\\Audio.mp3";
-
+        //动态更新音频时间
         private DispatcherTimer timer;
+
         public AudioTestView()
         {
             InitializeComponent();
@@ -56,9 +63,7 @@ namespace QTest.Views
                 System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.NAudioPainter1.Child = waveformPainter1;
             this.NAudioPainter2.Child = waveformPainter2;
-
-            outputFolder = Path.Combine(System.Windows.Forms.Application.StartupPath, "Recording");
-            Directory.CreateDirectory(outputFolder);
+            
         }
 
         private void Audio_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -79,7 +84,7 @@ namespace QTest.Views
             timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(500),
-                IsEnabled = true
+                IsEnabled = false
             };
             timer.Tick += Timer_Tick;
         }
@@ -126,6 +131,7 @@ namespace QTest.Views
                 MessageBox.Show("The selected output driver is not available on this system!");
                 return;
             }
+            
             if (waveOut != null)
             {
                 if (waveOut.PlaybackState == PlaybackState.Playing)
@@ -151,11 +157,12 @@ namespace QTest.Views
             try
             {
                 sampleProvider = CreateInputStream(fileName);
-                Console.WriteLine("ISampleProvider:" + sampleProvider);
+                Console.WriteLine("ISampleProvider:" + sampleProvider + " fileName:"+ fileName);
             }
             catch (Exception createException)
             {
                 MessageBox.Show(String.Format("{0}", createException.Message), "Error Loading File");
+                
                 return;
             }
             total_time.Text = String.Format("{0:00}:{1:00}", (int)audioFileReader.TotalTime.TotalMinutes,
@@ -168,6 +175,10 @@ namespace QTest.Views
             {
                 MessageBox.Show(String.Format("{0}", initException.Message), "Error Initializing Output");
                 return;
+            }
+            if (!timer.IsEnabled)
+            {
+                timer.Start();
             }
             waveOut.Play();
         }
@@ -223,20 +234,24 @@ namespace QTest.Views
 
         private void CloseWaveOut()
         {
-            if (waveOut != null)
-            {
-                waveOut.Stop();
-            }
             if (audioFileReader != null)
             {
                 audioFileReader.Dispose();
                 setVolumeDelegate = null;
                 audioFileReader = null;
+                audioFileReader2.Dispose();
+                audioFileReader2 = null;
             }
             if (waveOut != null)
             {
+                waveOut.Stop();
                 waveOut.Dispose();
                 waveOut = null;
+            }
+            slider.Value = 0;
+            if(timer.IsEnabled)
+            {
+                timer.Stop();
             }
         }
 
@@ -251,7 +266,7 @@ namespace QTest.Views
             }
         }
 
-        private void StopBtn_Click(object sender, RoutedEventArgs e) => waveOut?.Stop();
+        private void StopBtn_Click(object sender, RoutedEventArgs e) => CloseWaveOut();
         
         private void SolidRadio_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -295,32 +310,167 @@ namespace QTest.Views
 
         private void StartRecordBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Console.WriteLine("StartRecordBtn_Click!!");
+            CleanUp();
+            StopBtn_Click(stopBtn, new RoutedEventArgs());
+            if(captureDevice == null)
+            {
+                captureDevice = CreateWaveInDevice();
+            }
+            outputFilename = GetOutFileName();
+            out_file.Text = outputFilename;
+
+            if(!Directory.Exists(outputFolder))
+            {
+                Directory.CreateDirectory(outputFolder);
+            }
+
+            waveWriter = new WaveFileWriter(Path.Combine(outputFolder, outputFilename), captureDevice.WaveFormat);
+            captureDevice.StartRecording();
+            SetControlStates(true);
+        }
+
+        private string GetOutFileName()
+        {
+            var deviceName = captureDevice.GetType().Name;
+            var sampleRate = $"{captureDevice.WaveFormat.SampleRate / 1000}kHz";
+            var channels = captureDevice.WaveFormat.Channels == 1 ? "mono" : "stereo";
+
+            return $"{deviceName} {sampleRate} {channels} {DateTime.Now:yyy-MM-dd}.wav";
+        }
+
+        private IWaveIn CreateWaveInDevice()
+        {
+            IWaveIn newWaveIn;
+            var deviceNumber = recordBox.SelectedIndex;
+            newWaveIn = new WaveIn() { DeviceNumber = deviceNumber };
+            var sampleRate = (int)rateBox.SelectedItem;
+            var channel = channelBox.SelectedIndex + 1;
+            newWaveIn.WaveFormat = new WaveFormat(sampleRate, channel);
+            newWaveIn.DataAvailable += OnDataAvailable;
+            newWaveIn.RecordingStopped += OnRecordingStopped;
+            return newWaveIn;
+        }
+
+        private void OnDataAvailable(object sender, WaveInEventArgs e)
+        {
+            if(!this.Dispatcher.CheckAccess())
+            {
+                this.Dispatcher.BeginInvoke(new EventHandler<WaveInEventArgs>(OnDataAvailable), sender, e);
+            }
+            else
+            {
+                waveWriter.Write(e.Buffer, 0, e.BytesRecorded);
+                int secondsRecorded = (int)(waveWriter.Length / waveWriter.WaveFormat.AverageBytesPerSecond);
+                if (secondsRecorded >= 30)
+                {
+                    StopRecording();
+                }
+                else
+                {
+                    recordBar.Value = secondsRecorded;
+                }
+            }
+        }
+
+        private void OnRecordingStopped(object sender, StoppedEventArgs e)
+        {
+            if (!this.Dispatcher.CheckAccess())
+            {
+                this.Dispatcher.BeginInvoke(new EventHandler<StoppedEventArgs>(OnRecordingStopped), sender, e);
+            }
+            else
+            {
+                FinalizeWaveFile();
+                recordBar.Value = 0;
+                if (e.Exception != null)
+                {
+                    MessageBox.Show(String.Format("A problem was encountered during recording {0}",
+                                                  e.Exception.Message));
+                }
+                SetControlStates(false);
+            }
+        }
+
+        private void SetControlStates(bool v)
+        {
+            startRecordBtn.IsEnabled = !v;
+            stopRecordBtn.IsEnabled = v;
+
+            recordPlay.IsEnabled = !v;
+            recordOpen.IsEnabled = !v;
+            recordDelete.IsEnabled = !v;
+        }
+
+        private void CleanUp()
+        {
+            if(captureDevice!=null)
+            {
+                captureDevice.Dispose();
+                captureDevice = null;
+            }
+            FinalizeWaveFile();
+        }
+
+        private void FinalizeWaveFile()
+        {
+            waveWriter?.Dispose();
+            waveWriter = null;
         }
 
         private void StopRecordBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Console.WriteLine("StopRecordBtn_Click!!");
+            StopRecording();
+        }
+
+        private void StopRecording()
+        {
+            captureDevice?.StopRecording();
         }
 
         private void RecordPlay_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Console.WriteLine("RecordPlayClick!!");
-        }
-
-        private void RecordPause_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Console.WriteLine("RecordPauseClick!!");
+            if(out_file.Text.Length != 0)
+            {
+                Console.WriteLine("fileName:{0} newfileName:{1}", fileName, Path.Combine(outputFolder, outputFilename));
+                string outfileName = Path.Combine(outputFolder, outputFilename);
+                file_name.Text = outputFilename;
+                //优先播放新录制的音频
+                if (!fileName.Equals(outfileName))
+                {
+                    CloseWaveOut();
+                }
+                fileName = outfileName;
+                PlayBtn_Click(playBtn, new RoutedEventArgs());
+            }
         }
 
         private void RecordOpen_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Console.WriteLine("RecordOpenClick!!");
+            if (Directory.Exists(outputFolder))
+            {
+                Process.Start(outputFolder);
+            }
         }
 
         private void RecordDelete_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Console.WriteLine("RecordDeleteClick!!");
+            CloseWaveOut();
+            FinalizeWaveFile();
+            try
+            {
+                if(Directory.Exists(outputFolder))
+                {
+                    Directory.Delete(outputFolder, true);
+                    out_file.Text = String.Empty;
+                    file_name.Text = String.Empty;
+                    fileName = System.Windows.Forms.Application.StartupPath + "\\Audio.mp3";
+                    MessageBox.Show("录音已删除！");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void OnPostVolumeMeter(object sender, StreamVolumeEventArgs e)
@@ -331,7 +481,7 @@ namespace QTest.Views
 
         private void OnPreVolumeMeter(object sender, StreamVolumeEventArgs e)
         {
-            Console.WriteLine(e.MaxSampleValues[0] + "---" + e.MaxSampleValues[1]);
+            //Console.WriteLine(e.MaxSampleValues[0] + "---" + e.MaxSampleValues[1]);
             waveformPainter1.AddMax(e.MaxSampleValues[0]);
             waveformPainter2.AddMax(e.MaxSampleValues[1]);
         }
@@ -348,7 +498,6 @@ namespace QTest.Views
             {
                 slider.Value = 0;
             }
-           
         }
 
         private void OpenFileBtn_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -362,6 +511,7 @@ namespace QTest.Views
                 fileName = openFileDialog.FileName;
                 string[] arrs = fileName.Split('\\');
                 file_name.Text = arrs[arrs.Length-1];
+                CloseWaveOut();
             }
         }
 
@@ -369,7 +519,11 @@ namespace QTest.Views
         {
             Console.WriteLine("NAudio Test Unloaded!!!");
             waveOut?.Dispose();
+            waveOut = null;
             captureDevice?.Dispose();
+            captureDevice = null;
+            waveWriter?.Dispose();
+            waveWriter = null;
             if (timer.IsEnabled)
                 timer.Stop();
         }

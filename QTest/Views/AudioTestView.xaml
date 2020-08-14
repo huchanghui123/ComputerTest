@@ -27,20 +27,19 @@
                 <Button x:Name="stopBtn" Width="25" Height="23" Click="StopBtn_Click">
                     <Image Source="../Resources/Stop.png"/>
                 </Button>
-                <TextBlock Text="Current Time:" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Text="当前时间:" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="current_time" Text="00:00" Margin="5,0,0,0" VerticalAlignment="Center"/>
-                <TextBlock Text="Total Time:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock Text="音频总长:" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="total_time" Text="00:00" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="file_name" Margin="10,0,0,0" VerticalAlignment="Center"/>
             </ToolBar>
             <StackPanel Orientation="Horizontal">
-                <GroupBox Header="Output Driver" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <GroupBox Header="音频输出" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <Canvas>
                         <ComboBox x:Name="audioBox" Margin="5,5,0,0" Width="280" IsEditable="True" VerticalAlignment="Top"/>
-                        <TextBlock Text="Latency: " Canvas.Left="30" Canvas.Top="50"/>
+                        <TextBlock Text="延迟(ms): " Canvas.Left="30" Canvas.Top="50"/>
                         <ComboBox x:Name="latncyBox" Width="120" IsEditable="True" Canvas.Left="90" Canvas.Top="48" />
-                        <TextBlock Text="ms" Canvas.Left="215" Canvas.Top="50"/>
-                        <TextBlock Text="Volume: " Canvas.Left="30" Canvas.Top="85"/>
+                        <TextBlock Text="音量大小: " Canvas.Left="30" Canvas.Top="85"/>
                         <wfi:WindowsFormsHost x:Name="NAudioVolumeSlider" Width="120" Height="15" 
                                               Canvas.Left="90" Canvas.Top="85">
                             <!-- 此处为NAudio volumeSlider控件-->
@@ -58,21 +57,21 @@
                         </wfi:WindowsFormsHost>
                     </Canvas>
                 </GroupBox>
-                <GroupBox Header="WAV Recording" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray"  VerticalAlignment="Top" HorizontalAlignment="Left">
+                <GroupBox Header="wav音频录制" Margin="10,5,0,0" Width="300" Height="250" BorderBrush="Gray"  VerticalAlignment="Top" HorizontalAlignment="Left">
                     <Canvas>
                         <ComboBox x:Name="recordBox" Margin="5,5,0,0" Width="280" IsEditable="True" VerticalAlignment="Top"/>
-                        <TextBlock Text="Sample Rate:" Canvas.Left="15" Canvas.Top="45" />
-                        <TextBlock Text="Channels:" Canvas.Left="150" Canvas.Top="45" />
+                        <TextBlock Text="采样率:" Canvas.Left="15" Canvas.Top="45" />
+                        <TextBlock Text="通道:" Canvas.Left="150" Canvas.Top="45" />
                         <ComboBox x:Name="rateBox" Width="120" Canvas.Left="15" Canvas.Top="65" IsEditable="True"/>
                         <ComboBox x:Name="channelBox" Width="120" Canvas.Left="150" Canvas.Top="65"/>
-                        <Button x:Name="startRecordBtn" Content="Start Recording" Width="120" Height="20" Canvas.Left="15" Canvas.Top="100" Click="StartRecordBtn_Click" />
-                        <Button x:Name="stopRecordBtn" Content="Stop Recording" Width="120" Height="20" Canvas.Left="150" Canvas.Top="100" Click="StopRecordBtn_Click" />
-                        <TextBlock Text="Recording Progress:" Canvas.Left="15" Canvas.Top="130" />
-                        <ProgressBar Width="255" Height="20" Canvas.Left="15" Canvas.Top="150" />
-                        <Button Content="Play" Width="50" Canvas.Left="20" Canvas.Top="200" Click="RecordPlay_Click" />
-                        <Button Content="Pause" Width="50" Canvas.Left="85" Canvas.Top="200" Click="RecordPause_Click" />
-                        <Button Content="Open" Width="50" Canvas.Left="150" Canvas.Top="200" Click="RecordOpen_Click" />
-                        <Button Content="Delete" Width="50" Canvas.Left="215" Canvas.Top="200" Click="RecordDelete_Click" />
+                        <Button x:Name="startRecordBtn" Content="开始录制" Width="120" Height="20" Canvas.Left="15" Canvas.Top="100" Click="StartRecordBtn_Click" />
+                        <Button x:Name="stopRecordBtn" Content="停止录制" Width="120" Height="20" Canvas.Left="150" Canvas.Top="100" Click="StopRecordBtn_Click" />
+                        <TextBlock Text="录制进度:" Canvas.Left="15" Canvas.Top="130" />
+                        <ProgressBar x:Name="recordBar" Width="255" Height="20" Canvas.Left="15" Canvas.Top="150" />
+                        <TextBlock x:Name="out_file" Canvas.Left="15" Canvas.Top="175"/>
+                        <Button x:Name="recordPlay" Content="播放录音" Width="80" Canvas.Left="15" Canvas.Top="200" Click="RecordPlay_Click" />
+                        <Button x:Name="recordOpen" Content="打开录音" Width="80" Canvas.Left="102" Canvas.Top="200" Click="RecordOpen_Click" />
+                        <Button x:Name="recordDelete" Content="删除录音" Width="80" Canvas.Left="189" Canvas.Top="200" Click="RecordDelete_Click" />
                     </Canvas>
                 </GroupBox>
             </StackPanel>
