@@ -4,8 +4,53 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800">
+        d:DesignHeight="400" d:DesignWidth="450" Loaded="OnLoaded" Unloaded="WDTUnloaded">
     <Grid>
-        <Label Content="WDTView" />
+        <Rectangle Stroke="Black" Width="400" Height="100" Margin="20,40,0,0" Fill="Transparent"
+                   StrokeDashArray="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
+                <TextBlock Text="电脑型号" VerticalAlignment="Center"/>
+                <ComboBox x:Name="minipc_type" Width="100" Margin="20,0,0,0" DropDownClosed="Minipc_type_DropDownClosed"/>
+            </StackPanel>
+            <Canvas>
+                <TextBlock x:Name="wdt_info" Height="80" Width="380" Text="" Canvas.Left="30" Canvas.Top="20" TextWrapping="Wrap" />
+                <TextBlock x:Name="driver_status" Text="驱动状态" Canvas.Left="20" Canvas.Top="120"/>
+                <TextBlock x:Name="chip_name" Text="芯片型号：" Canvas.Left="20" Canvas.Top="140"/>
+                <TextBlock x:Name="interval" Text="喂狗间隔：" Canvas.Left="20" Canvas.Top="160"/>
+                <TextBlock x:Name="uint" Text="单位：" Canvas.Left="20" Canvas.Top="180"/>
+                <RadioButton x:Name="second" Content="秒" Canvas.Left="60" Canvas.Top="180" IsChecked="True" Checked="Second_Checked"/>
+                <RadioButton x:Name="minute" Content="分" Canvas.Left="100" Canvas.Top="180" Checked="Minute_Checked" IsEnabled="False"/>
+                <StackPanel Orientation="Horizontal" Canvas.Left="20" Canvas.Top="200">
+                    <TextBlock x:Name="time_out" Text="Time-out" VerticalAlignment="Center"/>
+                    <TextBox x:Name="time_val" Width="100" Margin="10,0,0,0" InputMethod.IsInputMethodEnabled="False"
+                             PreviewTextInput="Time_val_PreviewTextInput" TextChanged="Time_val_TextChanged">
+                        <TextBox.Resources>
+                            <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                                <VisualBrush.Visual>
+                                    <TextBlock FontStyle="Italic" Text="10~65535"/>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </TextBox.Resources>
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="{x:Null}">
+                                        <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="">
+                                        <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <Button x:Name="feed_button" Content="喂狗" Width="50" Margin="20,0,0,0" Click="Feed_Click" IsEnabled="False"/>
+                    <Button x:Name="stop_button" Content="终止" Width="50" Margin="20,0,0,0" Click="Stop_Click"/>
+                </StackPanel>
+                
+            </Canvas>
+        </StackPanel>
+        
     </Grid>
 </UserControl>

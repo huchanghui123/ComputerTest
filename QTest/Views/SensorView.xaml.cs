@@ -81,15 +81,23 @@ namespace QTest.Views
             {
                 try
                 {
-                    th.Abort();
                     allow = false;
-                    cpuCelsius.Dispose();
                     Console.WriteLine("Sensor Exit!!!");
                 }
-                catch (Exception)
+                catch (ThreadAbortException)
                 {
-                    throw;
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                finally
+                {
+                    th.Abort();
+                    cpuCelsius.Dispose();
+                    Console.WriteLine("Sensor finally Exit!!!");
+                }
+                
             }
         }
 

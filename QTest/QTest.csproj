@@ -71,6 +71,7 @@
     <Compile Include="instances\BaseData.cs" />
     <Compile Include="instances\MainBoardData.cs" />
     <Compile Include="instances\MyWaveOut.cs" />
+    <Compile Include="instances\OpenLibSys.cs" />
     <Compile Include="instances\SensorData.cs" />
     <Compile Include="Models\AudioTest.cs" />
     <Compile Include="Models\GPIOTools.cs" />
@@ -83,6 +84,8 @@
     <Compile Include="Tools\ComputerTool.cs" />
     <Compile Include="instances\Temperatures.cs" />
     <Compile Include="Tools\CpuTemperatureReader.cs" />
+    <Compile Include="Tools\WatchDogManager.cs" />
+    <Compile Include="Tools\WatchDogUtils.cs" />
     <Compile Include="Views\AudioTestView.xaml.cs">
       <DependentUpon>AudioTestView.xaml</DependentUpon>
     </Compile>

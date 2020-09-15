@@ -1,4 +1,5 @@
 ﻿using QTest.Models;
+using QTest.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,31 @@ namespace QTest
         public MainWindow()
         {
             InitializeComponent();
-            
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void WindowClosed(object sender, EventArgs e)
         {
-            
+            Console.WriteLine("MainWindow Closed!");
+            WatchDogManager tm = WatchDogManager.Instance;
+            if (tm.Timer != null)
+            {
+                MessageBoxResult result = MessageBox.Show("看门狗正在运行是否终止看门狗？", "提示",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                if (result == MessageBoxResult.Yes)
+                {
+                    tm.Timer.Stop();
+                    if(tm.WatchDog.MinipcType.Equals("Q500"))
+                    {
+                        tm.WatchDog.StopWatchDog(0xf1, 0x40);
+                    }
+                    else
+                    {
+                        tm.WatchDog.StopWatchDog(0x72, 0x80);
+                    }
+                }
+                tm.WatchDog.SysDispose();
+            }
         }
 
         private void Summary(object sender, RoutedEventArgs e)

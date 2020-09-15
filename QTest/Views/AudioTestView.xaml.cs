@@ -253,6 +253,7 @@ namespace QTest.Views
             {
                 timer.Stop();
             }
+            
         }
 
         private void PauseBtn_Click(object sender, RoutedEventArgs e)
@@ -434,7 +435,7 @@ namespace QTest.Views
                 Console.WriteLine("fileName:{0} newfileName:{1}", fileName, Path.Combine(outputFolder, outputFilename));
                 string outfileName = Path.Combine(outputFolder, outputFilename);
                 file_name.Text = outputFilename;
-                //优先播放新录制的音频
+                //播放新录制的音频
                 if (!fileName.Equals(outfileName))
                 {
                     CloseWaveOut();
