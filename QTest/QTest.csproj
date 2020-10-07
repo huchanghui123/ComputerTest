@@ -85,7 +85,7 @@
     <Compile Include="instances\Temperatures.cs" />
     <Compile Include="Tools\CpuTemperatureReader.cs" />
     <Compile Include="Tools\WatchDogManager.cs" />
-    <Compile Include="Tools\WatchDogUtils.cs" />
+    <Compile Include="Tools\SuperIO.cs" />
     <Compile Include="Views\AudioTestView.xaml.cs">
       <DependentUpon>AudioTestView.xaml</DependentUpon>
     </Compile>

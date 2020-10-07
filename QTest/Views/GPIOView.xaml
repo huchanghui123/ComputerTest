@@ -4,8 +4,64 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800">
+        d:DesignHeight="400" d:DesignWidth="450" Loaded="GPIO_Loaded" Unloaded="GPIO_Unloaded">
     <Grid>
-        <Label Content="GPIOView" />
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="20,10,0,10">
+                <TextBlock Text="电脑型号" VerticalAlignment="Center"/>
+                <ComboBox x:Name="minipc_type" Width="100" Margin="20,0,0,0" DropDownClosed="Minipc_type_DropDownClosed"/>
+            </StackPanel>
+            <Canvas Margin="20,0,0,20">
+                <TextBlock x:Name="driver_status" Text="驱动状态" />
+                <TextBlock x:Name="chip_name" Text="芯片型号：" Canvas.Top="20"/>
+                <TextBlock Text=" " Canvas.Top="40" />
+                <TextBlock Text="Output/Input" Canvas.Top="40" Canvas.Left="100" />
+                <TextBlock Text="Value" Canvas.Top="40" Canvas.Left="200" />
+                <TextBlock Text="GPIO1" Canvas.Top="60" />
+                <TextBox x:Name="gpio1_m" Width="30" Canvas.Top="60" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput" />
+                <TextBox x:Name="gpio1_v" Width="30" Canvas.Top="60" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text="GPIO2" Canvas.Top="80" />
+                <TextBox x:Name="gpio2_m" Width="30" Canvas.Top="80" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBox x:Name="gpio2_v" Width="30" Canvas.Top="80" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text="GPIO3" Canvas.Top="100" />
+                <TextBox x:Name="gpio3_m" Width="30" Canvas.Top="100" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBox x:Name="gpio3_v" Width="30" Canvas.Top="100" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text="GPIO4" Canvas.Top="120" />
+                <TextBox x:Name="gpio4_m" Width="30" Canvas.Top="120" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBox x:Name="gpio4_v" Width="30" Canvas.Top="120" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text="GPIO5" Canvas.Top="140" />
+                <TextBox x:Name="gpio5_m" Width="30" Canvas.Top="140" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBox x:Name="gpio5_v" Width="30" Canvas.Top="140" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text="GPIO6" Canvas.Top="160" />
+                <TextBox x:Name="gpio6_m" Width="30" Canvas.Top="160" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBox x:Name="gpio6_v" Width="30" Canvas.Top="160" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text="GPIO7" Canvas.Top="180" />
+                <TextBox x:Name="gpio7_m" Width="30" Canvas.Top="180" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBox x:Name="gpio7_v" Width="30" Canvas.Top="180" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text="GPIO8" Canvas.Top="200" />
+                <TextBox x:Name="gpio8_m" Width="30" Canvas.Top="200" Canvas.Left="100" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBox x:Name="gpio8_v" Width="30" Canvas.Top="200" Canvas.Left="200" MaxLength="1"
+                         InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
+                <TextBlock Text=" " Canvas.Top="220" />
+                <Button x:Name="model_btn" Content="Confirm"  Width="50" Click="Model_btn_Click" Canvas.Top="220" Canvas.Left="100" />
+                <Button x:Name="val_btn"  Content="Confirm" Width="50" Click="Val_btn_Click" Canvas.Top="220" Canvas.Left="200" />
+            </Canvas>
+            
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -13,7 +13,7 @@ namespace QTest.Views
     /// </summary>
     public partial class WDTView : UserControl
     {
-        private WatchDogUtils watchdog = null;
+        private SuperIO watchdog = null;
         //0:second 1:minute
         private int timeUint = 0;
         private DispatcherTimer wdttimer;
@@ -35,10 +35,11 @@ namespace QTest.Views
             Console.WriteLine("watchdog OnLoaded!");
             wdt_info.Text = "Watchdog Timer for ITE IT87xx Environment Control - Low Pin Count Input / Output." +
                 " Support of the IT8786、IT8784、IT8772、IT8728...";
-            string[] types = {"Q300", "Q500"};
+            string[] types = {"Q300", "Q500", "Other"};
             minipc_type.ItemsSource = types;
         }
 
+        //型号选择
         private void Minipc_type_DropDownClosed(object sender, EventArgs e)
         {
             Console.WriteLine("Minipc_type_DropDownClosed........." + minipc_type.Text);
@@ -48,7 +49,7 @@ namespace QTest.Views
             }
             if(watchdog == null)
             {
-                watchdog = new WatchDogUtils();
+                watchdog = new SuperIO();
                 InitWatchDogDriver();
             }
             watchdog.MinipcType = minipc_type.Text;
@@ -71,6 +72,7 @@ namespace QTest.Views
             }
         }
 
+        //设定喂狗时间
         private void Feed_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             //WDT的可编程超时范围为1~65535秒/分
@@ -125,6 +127,8 @@ namespace QTest.Views
             }
             watchdog.ExitSuperIo();
 
+            //看门狗管理器
+            //先清除已存在的看门狗，如果存在
             WatchDogManager tm = WatchDogManager.Instance;
             if (tm.Timer != null)
             {
@@ -134,14 +138,14 @@ namespace QTest.Views
                 tm.WatchDog = null;
             }
 
-            //设定喂狗时间，即在设定时间内必须喂狗，
+            //设定喂狗时间，即在设定时间内必须喂狗，否则会自动重启
             watchdog.FeedDog(feedTime);
             if (!wdttimer.IsEnabled)
             {
                 wdttimer.Interval = TimeSpan.FromMilliseconds(wtimer * 1000);
                 wdttimer.Start();
             }
-
+            
             tm.Timer = wdttimer;
             tm.WatchDog = watchdog;
         }
@@ -154,6 +158,7 @@ namespace QTest.Views
             watchdog.FeedDog(feedTime);
         }
 
+        //关闭看门狗功能
         private void Stop_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             time_val.Text = "";
@@ -219,6 +224,7 @@ namespace QTest.Views
             time_val.Text = time_val.Text.Replace(" ", "");
         }
 
+        //喂狗时间单位暂时不实现，默认使用秒计算
         private void Second_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
             if (second.IsChecked == true)

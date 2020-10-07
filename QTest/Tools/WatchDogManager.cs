@@ -10,7 +10,7 @@ namespace QTest.Tools
     public sealed class WatchDogManager
     {
         private DispatcherTimer timer;
-        private WatchDogUtils watchDog;
+        private SuperIO watchDog;
         private static readonly WatchDogManager instance = new WatchDogManager();
 
         static WatchDogManager() { }
@@ -26,6 +26,6 @@ namespace QTest.Tools
         }
 
         public DispatcherTimer Timer { get => timer; set => timer = value; }
-        public WatchDogUtils WatchDog { get => watchDog; set => watchDog = value; }
+        public SuperIO WatchDog { get => watchDog; set => watchDog = value; }
     }
 }

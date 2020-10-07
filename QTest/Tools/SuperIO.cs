@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QTest.Tools
 {
-    public class WatchDogUtils
+    public class SuperIO
     {
         private OpenLibSys.Ols MyOls;
         private string minipcType;
@@ -103,5 +103,15 @@ namespace QTest.Tools
             Console.WriteLine("WatchDog stopped!!!");
             ExitSuperIo();
         }
+
+        /*
+         * GPIO 
+         */
+        public void GpioFunction(byte reg, byte value)
+        {
+            MyOls.WriteIoPortByte(0x2e, reg);
+            MyOls.WriteIoPortByte(0x2f, value);
+        }
+
     }
 }
