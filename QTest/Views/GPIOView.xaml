@@ -7,9 +7,9 @@
         d:DesignHeight="400" d:DesignWidth="450" Loaded="GPIO_Loaded" Unloaded="GPIO_Unloaded">
     <Grid>
         <StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="20,10,0,10">
+            <StackPanel Orientation="Horizontal" Margin="20,10,0,5">
                 <TextBlock Text="电脑型号" VerticalAlignment="Center"/>
-                <ComboBox x:Name="minipc_type" Width="100" Margin="20,0,0,0" DropDownClosed="Minipc_type_DropDownClosed"/>
+                <ComboBox x:Name="combobox_type" Width="100" Margin="20,0,0,0" DropDownClosed="Minipc_type_DropDownClosed"/>
             </StackPanel>
             <Canvas Margin="20,0,0,20">
                 <TextBlock x:Name="driver_status" Text="驱动状态" />

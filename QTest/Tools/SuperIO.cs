@@ -10,7 +10,6 @@ namespace QTest.Tools
     {
         private OpenLibSys.Ols MyOls;
         private string minipcType;
-
         public string MinipcType { get => minipcType; set => minipcType = value; }
 
         public bool Initialize()
@@ -107,11 +106,45 @@ namespace QTest.Tools
         /*
          * GPIO 
          */
-        public void GpioFunction(byte reg, byte value)
+        public void SetGpioFunction(byte reg, byte value)
         {
             MyOls.WriteIoPortByte(0x2e, reg);
             MyOls.WriteIoPortByte(0x2f, value);
         }
 
+        //Q300
+        public void SetGpioFunction(ushort reg, byte value)
+        {
+            MyOls.WriteIoPortByte(reg, value);
+        }
+
+        public byte ReadGpioPortByte(byte date)
+        {
+            byte b = 0;
+            try
+            {
+                MyOls.WriteIoPortByte(0x2e, date);
+                b = MyOls.ReadIoPortByte(0x2f);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("An error occured:\n" + ex.Message);
+            }
+            return b;
+        }
+
+        public byte ReadGpioPortByte(ushort data)
+        {
+            byte b = 0;
+            try
+            {
+                b = MyOls.ReadIoPortByte(data);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("An error occured:\n" + ex.Message);
+            }
+            return b;
+        }
     }
 }
