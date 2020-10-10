@@ -30,8 +30,6 @@ namespace QTest.Views
 
         private void GPIO_Loaded(object sender, RoutedEventArgs e)
         {
-            //string[] types = { "Q300", "Q500" };
-            //combobox_type.ItemsSource = types;
             combobox_type.ItemsSource = System.Enum.GetNames(typeof(TypeEnum));
         }
 
@@ -95,6 +93,31 @@ namespace QTest.Views
                     break;
                 case TypeEnum.Q600P:
                     Console.WriteLine("Q600P...............");
+                    //test code
+                    //gp56 57
+                    gpio.SetGpioFunction(0x29, 0x40);
+                    gpio.SetGpioFunction(0xcc, 0xc0);
+                    //gpio.SetGpioFunction(0xb4, 0xc0);
+                    gpio.SetGpioFunction(0xb4, 0x00);
+
+                    //gp60 61 65
+                    gpio.SetGpioFunction(0x2a, 0x0b);
+                    gpio.SetGpioFunction(0xcd, 0x23);
+                    //gpio.SetGpioFunction(0xa05, 0x23);
+                    gpio.SetGpioFunction(0xa05, 0x00);
+
+                    //gp40
+                    gpio.SetGpioFunction(0x28, 0x01);
+                    gpio.SetGpioFunction(0xcb, 0x01);
+                    //gpio.SetGpioFunction(0xb3, 0x01);
+                    gpio.SetGpioFunction(0xb3, 0x00);
+
+                    //gp22 23
+                    gpio.SetGpioFunction(0x26, 0xff);
+                    gpio.SetGpioFunction(0xc9, 0xff);
+                    //gpio.SetGpioFunction(0xb1, 0x0c);
+                    gpio.SetGpioFunction(0xb1, 0x00);
+
                     break;
                 default:
                     break;

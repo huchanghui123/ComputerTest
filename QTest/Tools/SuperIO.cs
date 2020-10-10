@@ -112,7 +112,7 @@ namespace QTest.Tools
             MyOls.WriteIoPortByte(0x2f, value);
         }
 
-        //Q300
+        
         public void SetGpioFunction(ushort reg, byte value)
         {
             MyOls.WriteIoPortByte(reg, value);
