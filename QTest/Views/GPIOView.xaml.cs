@@ -254,6 +254,7 @@ namespace QTest.Views
                     byte gp_data4 = Convert.ToByte(m4, 2);
                     gpio.SetGpioFunction(0xc9, gp_data4);
 
+                    gpio.ExitSuperIo();
                     break;
                 default:
                     break;
@@ -319,6 +320,7 @@ namespace QTest.Views
                     byte gp_data4 = Convert.ToByte(v4, 2);
                     gpio.SetGpioFunction(0xb1, gp_data4);
 
+                    gpio.ExitSuperIo();
                     break;
                 default:
                     break;

@@ -17,6 +17,7 @@ namespace QTest.Views
     public partial class SensorView : UserControl
     {
         private CpuTemperatureReader cpuCelsius;
+        SensorManager sm = SensorManager.Instance;
         List<SensorData> sensorList;
         ObservableCollection<SensorData> baseDataList = new ObservableCollection<SensorData>();
         Thread th;
@@ -43,6 +44,8 @@ namespace QTest.Views
         {
             Console.WriteLine("start get cpu info ...");
             cpuCelsius = new CpuTemperatureReader();
+            
+            sm.CpuCelsius = cpuCelsius;
             while (allow)
             {
                 sensorList = cpuCelsius.GetTemperaturesInCelsius();
@@ -95,12 +98,10 @@ namespace QTest.Views
                 {
                     th.Abort();
                     cpuCelsius.Dispose();
+                    sm.CpuCelsius = null;
                     Console.WriteLine("Sensor finally Exit!!!");
                 }
-                
             }
         }
-
-        
     }
 }

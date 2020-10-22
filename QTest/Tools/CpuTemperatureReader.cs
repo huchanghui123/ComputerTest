@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace QTest.Tools
 {
-    class CpuTemperatureReader : IDisposable
+    public class CpuTemperatureReader : IDisposable
     {
         private Computer _computer;
 
@@ -32,7 +32,7 @@ namespace QTest.Tools
                 {
                     hardware.Update();
 
-                    Console.WriteLine("hardware name:{0}, type:{1}", hardware.Name, hardware.HardwareType);
+                    //Console.WriteLine("hardware name:{0}, type:{1}", hardware.Name, hardware.HardwareType);
                     //通过SUPERIO获取主板的电压、温度、CPU风扇转速 
                     if (hardware.HardwareType == HardwareType.Mainboard)
                     {

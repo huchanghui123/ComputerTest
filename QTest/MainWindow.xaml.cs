@@ -19,6 +19,7 @@ namespace QTest
         private void WindowClosed(object sender, EventArgs e)
         {
             Console.WriteLine("MainWindow Closed!");
+            //关闭程序前，释放掉资源
             WatchDogManager tm = WatchDogManager.Instance;
             if (tm.Timer != null)
             {
@@ -37,6 +38,12 @@ namespace QTest
                     }
                 }
                 tm.WatchDog.SysDispose();
+            }
+            SensorManager sm = SensorManager.Instance;
+            if (sm.CpuCelsius != null)
+            {
+                Console.WriteLine("CpuCelsius Dispose!!!");
+                sm.CpuCelsius.Dispose();
             }
         }
 

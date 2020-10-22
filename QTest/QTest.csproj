@@ -84,6 +84,7 @@
     <Compile Include="Tools\ComputerTool.cs" />
     <Compile Include="instances\Temperatures.cs" />
     <Compile Include="Tools\CpuTemperatureReader.cs" />
+    <Compile Include="Tools\SensorManager.cs" />
     <Compile Include="Tools\Utils.cs" />
     <Compile Include="Tools\WatchDogManager.cs" />
     <Compile Include="Tools\SuperIO.cs" />

@@ -1,7 +1,4 @@
-﻿using QTest.Tools;
-using System;
-
-namespace QTest.Models
+﻿namespace QTest.Models
 {
     public class UpTime
     {
