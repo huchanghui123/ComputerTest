@@ -26,9 +26,8 @@ namespace QTest.Views
 
         private void ShowDataList()
         {
-            
-
-            MBDataList.Add(new BaseData("主板", ComputerTool.GetBoardType()));
+            MBDataList.Add(new BaseData("主板"));
+            MBDataList.Add(new BaseData("型号", ComputerTool.GetBoardType()));
             MBDataList.Add(new BaseData("BIOS", ComputerTool.GetBios()));
 
             memList = ComputerTool.GetMemeryInfo();

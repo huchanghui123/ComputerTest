@@ -43,6 +43,10 @@ namespace QTest.Views
         private void Minipc_type_DropDownClosed(object sender, EventArgs e)
         {
             Console.WriteLine("Minipc_type_DropDownClosed........." + minipc_type.Text);
+            if(minipc_type.Text.Length == 0)
+            {
+                return;
+            }
             if(feed_button.IsEnabled == false)
             {
                 feed_button.IsEnabled = true;

@@ -16,6 +16,11 @@ namespace QTest
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Summary(sender, e);
+        }
+
         private void WindowClosed(object sender, EventArgs e)
         {
             Console.WriteLine("MainWindow Closed!");
@@ -86,5 +91,6 @@ namespace QTest
         {
             DataContext = new SerialTest();
         }
+        
     }
 }

@@ -55,6 +55,10 @@ namespace QTest.Views
         private void Minipc_type_DropDownClosed(object sender, EventArgs e)
         {
             Console.WriteLine("Minipc_type_DropDownClosed........." + combobox_type.Text);
+            if(combobox_type.Text.Length == 0)
+            {
+                return;
+            }
             if (gpio == null)
             {
                 gpio = new SuperIO();

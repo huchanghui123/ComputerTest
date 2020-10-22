@@ -364,16 +364,31 @@ namespace QTest.Tools
                 string ipaddress = String.Empty;
                 foreach (ManagementObject m in moc)
                 {
-                    type = m.Properties["PNPDeviceID"].Value.ToString();
+                    try
+                    {
+                        type = m.Properties["PNPDeviceID"].Value.ToString();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    
                     if (type.Length>3 && type.Substring(0,3) == "PCI")
                     {
-                        Name = m.Properties["Name"].Value.ToString();
-                        MACAddress = m.Properties["MACAddress"].Value.ToString();
+                        try
+                        {
+                            Name = m.Properties["Name"].Value.ToString();
+                            MACAddress = m.Properties["MACAddress"].Value.ToString();
+                            flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
+                            netEnabled = Convert.ToBoolean(m.Properties["NetEnabled"].Value);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        
                         net_list.Add(new BaseData("PCI物理网卡"));
                         net_list.Add(new BaseData("适配器", Name));
                         net_list.Add(new BaseData("MAC", MACAddress));
                         
-                        flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
                         switch (flag)
                         {
                             case 2:
@@ -387,14 +402,12 @@ namespace QTest.Tools
                                 break;
                         }
                         net_list.Add(new BaseData("状态", status));
-
-                        netEnabled = Convert.ToBoolean(m.Properties["NetEnabled"].Value);
+                        
                         if (netEnabled)
                         {
                             ipaddress = GetIPv4Address(Name);
                             net_list.Add(new BaseData("IPv4地址", ipaddress));
                         }
-                        
                     }
                 }
                 
@@ -402,8 +415,9 @@ namespace QTest.Tools
                 moc.Dispose();
                 return net_list;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
                 return null;
             }
         }
@@ -412,27 +426,34 @@ namespace QTest.Tools
         {
             String IPAddress = String.Empty;
             NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface adapter in adapters)
+            try
             {
-                //Console.WriteLine(adapter.Description);
-                //Console.WriteLine(adapter.NetworkInterfaceType.ToString());
-
-                if (adapter.Description.Equals(adapterName))
+                foreach (NetworkInterface adapter in adapters)
                 {
-                    UnicastIPAddressInformationCollection unicastIPAddressInformation = adapter.GetIPProperties().UnicastAddresses;
-                    if (unicastIPAddressInformation.Count > 0)
+                    //Console.WriteLine(adapter.Description);
+                    //Console.WriteLine(adapter.NetworkInterfaceType.ToString());
+                    if (adapter.Description.Equals(adapterName))
                     {
-                        foreach (var item in unicastIPAddressInformation)
+                        UnicastIPAddressInformationCollection unicastIPAddressInformation = adapter.GetIPProperties().UnicastAddresses;
+                        if (unicastIPAddressInformation.Count > 0)
                         {
-                            if (item.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                            foreach (var item in unicastIPAddressInformation)
                             {
-                                IPAddress = item.Address.ToString();
+                                if (item.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                                {
+                                    IPAddress = item.Address.ToString();
+                                }
                             }
                         }
                     }
                 }
+                return IPAddress;
             }
-            return IPAddress;
+            catch (Exception)
+            {
+                return String.Empty;
+            }
+            
         }
 
     }
