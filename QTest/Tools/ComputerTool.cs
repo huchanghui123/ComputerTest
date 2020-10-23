@@ -276,7 +276,7 @@ namespace QTest.Tools
         }
 
         //内存信息
-        public static List<BaseData> GetMemeryInfo()
+        public static List<BaseData> GetMemoryInfo()
         {
             try
             {
@@ -292,7 +292,7 @@ namespace QTest.Tools
                     //    m.Properties["Name"].Value.ToString() + " " +
                     //    Convert.ToInt32(m.Properties["Speed"].Value) + " " +
                     //    Convert.ToDouble(m.Properties["Capacity"].Value));
-                    mem_list.Add(new BaseData(m.Properties["Name"].Value.ToString()));
+                    mem_list.Add(new BaseData(m.Properties["Name"].Value.ToString(), "..\\Resources\\memory.png", 0));
                     mem_list.Add(new BaseData("厂家", m.Properties["Manufacturer"].Value.ToString()));
                     mem_list.Add(new BaseData("主频", m.Properties["Speed"].Value.ToString()+" MHz"));
                     capacity = Convert.ToDouble(m.Properties["Capacity"].Value);
@@ -329,7 +329,7 @@ namespace QTest.Tools
                         //    m.Properties["InterfaceType"].Value.ToString() + " " +
                         //     Convert.ToDouble(m.Properties["Size"].Value));
                         name = "存储设备";
-                        disk_list.Add(new BaseData(name));
+                        disk_list.Add(new BaseData(name, "..\\Resources\\hdd.png", 0));
                         disk_list.Add(new BaseData("型号", m.Properties["Caption"].Value.ToString()));
                         disk_list.Add(new BaseData("类型", m.Properties["InterfaceType"].Value.ToString()));
                         disksize = Convert.ToDouble(m.Properties["Size"].Value);
@@ -385,7 +385,7 @@ namespace QTest.Tools
                         {
                         }
                         
-                        net_list.Add(new BaseData("PCI物理网卡"));
+                        net_list.Add(new BaseData("PCI物理网卡", "..\\Resources\\Network.png", 0));
                         net_list.Add(new BaseData("适配器", Name));
                         net_list.Add(new BaseData("MAC", MACAddress));
                         

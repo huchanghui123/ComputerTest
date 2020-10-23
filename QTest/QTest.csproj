@@ -193,7 +193,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\audio.png" />
     <Resource Include="Resources\no_bomb.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +205,6 @@
     <Resource Include="Resources\System_Time.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\cgq_01.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\chip_02.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -218,13 +214,9 @@
     <Resource Include="Resources\chip.png" />
     <Resource Include="Resources\cpu.png" />
     <Resource Include="Resources\hdd.png" />
-    <Resource Include="Resources\mainboard.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\SerialPort_16x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\serial_port.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\sun_128px_close.png" />
@@ -235,6 +227,24 @@
     <Resource Include="Resources\Pause.png" />
     <Resource Include="Resources\Play.png" />
     <Resource Include="Resources\Stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\memory.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\SerialPort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Network.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sensor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Audio.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mainboard.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

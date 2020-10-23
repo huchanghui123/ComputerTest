@@ -3,6 +3,7 @@ using QTest.Tools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows.Controls;
 
 namespace QTest.Views
@@ -21,16 +22,26 @@ namespace QTest.Views
         {
             InitializeComponent();
 
+
+            Thread t = new Thread(WorkThread)
+            {
+                IsBackground = true
+            };
+            t.Start();
+        }
+
+        void WorkThread()
+        {
             ShowDataList();
         }
 
         private void ShowDataList()
         {
-            MBDataList.Add(new BaseData("主板"));
+            MBDataList.Add(new BaseData("主板", "..\\Resources\\mainboard.png", 0));
             MBDataList.Add(new BaseData("型号", ComputerTool.GetBoardType()));
             MBDataList.Add(new BaseData("BIOS", ComputerTool.GetBios()));
 
-            memList = ComputerTool.GetMemeryInfo();
+            memList = ComputerTool.GetMemoryInfo();
             if (memList != null)
             {
                 foreach (BaseData baseData in memList)
@@ -57,7 +68,11 @@ namespace QTest.Views
                 }
             }
 
-            MBListView.ItemsSource = MBDataList;
+            this.Dispatcher.Invoke((Action)delegate ()
+            {
+                MBListView.ItemsSource = MBDataList;
+            });
+            
         }
 
         private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)

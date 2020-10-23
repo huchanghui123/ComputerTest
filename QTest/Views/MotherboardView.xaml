@@ -16,11 +16,13 @@
                   Unloaded="OnUnloaded" Loaded="OnLoaded">
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnStyle}">
-                    <GridViewColumn Header="项目" Width="100" >
+                    <GridViewColumn Header="   项目" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock x:Name="title" Text="{Binding Path=Name}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <!--imag为空什么都不显示-->
+                                    <Image x:Name="title_img" Source="{Binding Path=Image, TargetNullValue={x:Null}}" Width="20" Height="20"/>
+                                    <TextBlock x:Name="title" Text="{Binding Path=Name}" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                 </StackPanel>
                                 <!-- 如果Value为空就加粗字体 -->
                                 <DataTemplate.Triggers>

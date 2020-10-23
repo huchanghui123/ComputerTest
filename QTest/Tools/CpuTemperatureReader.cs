@@ -40,7 +40,7 @@ namespace QTest.Tools
                         {
                             subhardware.Update();
                             //Console.WriteLine("subhardware Name:{0}", subhardware.Name);
-                            sensorList.Add(new SensorData(subhardware.Name));
+                            sensorList.Add(new SensorData(subhardware.Name, "..\\Resources\\chip_02.ico"));
                             foreach (var sensor in subhardware.Sensors)
                             {
                                 if (sensor.SensorType == SensorType.Voltage && sensor.Name.Equals("VBat", StringComparison.OrdinalIgnoreCase))
@@ -67,7 +67,7 @@ namespace QTest.Tools
                     //获取CPU核心使用率、温度、功耗
                     else if (hardware.HardwareType == HardwareType.CPU)
                     {
-                        sensorList.Add(new SensorData(hardware.Name));
+                        sensorList.Add(new SensorData(hardware.Name, "..\\Resources\\cpu.png"));
                         foreach (var sensor in hardware.Sensors)
                         {
                             if (sensor.SensorType == SensorType.Load && sensor.Value.HasValue)
@@ -93,7 +93,7 @@ namespace QTest.Tools
                     //获取内存使用率
                     else if (hardware.HardwareType == HardwareType.RAM)
                     {
-                        sensorList.Add(new SensorData(hardware.Name));
+                        sensorList.Add(new SensorData(hardware.Name, "..\\Resources\\memory.png"));
                         foreach (var sensor in hardware.Sensors)
                         {
                             if (sensor.SensorType == SensorType.Load && sensor.Value.HasValue)
@@ -111,7 +111,7 @@ namespace QTest.Tools
                     //获取硬盘温度、使用率
                     else if (hardware.HardwareType == HardwareType.HDD)
                     {
-                        sensorList.Add(new SensorData(hardware.Name));
+                        sensorList.Add(new SensorData(hardware.Name, "..\\Resources\\hdd.png"));
                         foreach (var sensor in hardware.Sensors)
                         {
                             if (sensor.SensorType == SensorType.Temperature && sensor.Value.HasValue)

@@ -97,8 +97,11 @@ namespace QTest.Views
                 finally
                 {
                     th.Abort();
-                    cpuCelsius.Dispose();
-                    sm.CpuCelsius = null;
+                    if(cpuCelsius!=null)
+                    {
+                        cpuCelsius.Dispose();
+                        sm.CpuCelsius = null;
+                    }
                     Console.WriteLine("Sensor finally Exit!!!");
                 }
             }

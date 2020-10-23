@@ -10,6 +10,7 @@ namespace QTest.instances
     public class BaseData : INotifyPropertyChanged
     {
         public string Name { get; set; }
+        public string Image { get; set; }
         string _value;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -17,6 +18,12 @@ namespace QTest.instances
         public BaseData(string name)
         {
             Name = name;
+        }
+
+        public BaseData(string name, string image, int i)
+        {
+            Name = name;
+            Image = image;
         }
 
         public BaseData(string name, string value)

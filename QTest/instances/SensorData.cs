@@ -12,6 +12,7 @@ namespace QTest.instances
     public class SensorData : INotifyPropertyChanged
     {
         public string Name { get; set; }
+        public string Image { get; set; }
         string _value;
         string _minValue;
         string _maxValue;
@@ -21,6 +22,12 @@ namespace QTest.instances
         public SensorData(string name)
         {
             Name = name;
+        }
+
+        public SensorData(string name, string image)
+        {
+            Name = name;
+            Image = image;
         }
 
         public SensorData(string value, string minValue, string maxValue)
