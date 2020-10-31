@@ -7,4 +7,4 @@
 
 运行截图如下：
 
-![qtest](.\qtest.png)
+![qtest](./qtest.png)
