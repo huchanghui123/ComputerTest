@@ -7,7 +7,7 @@
         xmlns:models="clr-namespace:QTest.Models"
         xmlns:views="clr-namespace:QTest.Views"
         mc:Ignorable="d"
-        Title="QTest" Height="700" Width="800" Icon="Resources\no_bomb.ico" Loaded="Window_Loaded"  Closed="WindowClosed">
+        Title="Qotom PC" Height="700" Width="800" Loaded="Window_Loaded"  Closed="WindowClosed">
     <Window.Resources>
         <DataTemplate x:Name="summaryTemplate" DataType="{x:Type models:Summary}">
             <views:SummaryView DataContext="{Binding}" />
@@ -55,8 +55,8 @@
         <ContentControl Grid.Row="0" Grid.RowSpan="5" Grid.Column="1" Grid.ColumnSpan="4" Content="{Binding}"/>
 
         <Grid Width="154" Height="22" VerticalAlignment="Top">
-            <Image Source="Resources\no_bomb.ico" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <TextBlock Text="QTest V1.00" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="23,0,0,0" />
+            <!--<Image Source="Resources\logo_32.ico" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center"/>-->
+            <TextBlock Text="Version 1.00" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" />
         </Grid>
 
         <TreeView x:Name="tv" Grid.Row="0" Grid.RowSpan="5" Margin="0,20,0,0"  >
@@ -158,7 +158,7 @@
                 <TreeViewItem.HeaderTemplate>
                     <HierarchicalDataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="20" Height="20" Source="Resources\Audio.png" Margin="0,0,5,0"/>
+                            <Image Width="20" Height="20" Source="Resources\audio_test.png" Margin="0,0,5,0"/>
                             <TextBlock Text="音频测试" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>

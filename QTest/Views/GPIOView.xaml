@@ -15,8 +15,10 @@
                 <TextBlock x:Name="driver_status" Text="驱动状态" />
                 <TextBlock x:Name="chip_name" Text="芯片型号：" Canvas.Top="20"/>
                 <TextBlock Text=" " Canvas.Top="40" />
-                <TextBlock Text="Output/Input" Canvas.Top="40" Canvas.Left="100" />
-                <TextBlock Text="Value" Canvas.Top="40" Canvas.Left="200" />
+                <ComboBox x:Name="model_box" Canvas.Top="40" Width="20" Height="15" Canvas.Left="100" DropDownClosed="Model_box_DropDownClosed"/>
+                <TextBlock Text="Model" Canvas.Top="40" Canvas.Left="120" />
+                <ComboBox x:Name="val_box" Canvas.Top="40" Width="20" Height="15" Canvas.Left="200" DropDownClosed="Val_box_DropDownClosed" />
+                <TextBlock Text="Value" Canvas.Top="40" Canvas.Left="220" />
                 <TextBlock Text="GPIO1" Canvas.Top="60" />
                 <TextBox x:Name="gpio1_m" Width="30" Canvas.Top="60" Canvas.Left="100" MaxLength="1"
                          InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput" />
