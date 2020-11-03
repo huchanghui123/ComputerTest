@@ -1,4 +1,5 @@
-﻿using QTest.Tools;
+﻿using QTest.GPIO;
+using QTest.Tools;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -74,6 +75,8 @@ namespace QTest.Views
             }
             else
             {
+                model_btn.IsEnabled = true;
+                val_btn.IsEnabled = true;
                 TypeEnum type = (TypeEnum)Enum.Parse(typeof(TypeEnum),
                     combobox_type.SelectedItem.ToString(), false);
                 gpio.InitSuperIO();
@@ -85,39 +88,6 @@ namespace QTest.Views
 
         private void LoadGpioData(TypeEnum type)
         {
-            ////q600p gp56 57 29h <6>= 1
-            //gpio.SetGpioFunction(0x29, 0x40);
-            //gpio.SetGpioFunction(0xcc, 0xc0);
-            //gpio.SetGpioFunction(0xb4, 0xc0);
-            ////gpio.SetGpioFunction(0xb4, 0x00);
-
-            ////gp60 61 65
-            ////gpio.SetGpioFunction(0x2a, 0x0b);
-            ////gpio.SetGpioFunction(0xcd, 0x23);
-            ////gpio.SetGpioFunction(0xa05, 0x23);
-            ////gpio.SetGpioFunction(0xa05, 0x00);
-
-            ////gp60 61 62 29h<6>=1
-            //gpio.SetGpioFunction(0x29, 0xc0);
-            //gpio.SetGpioFunction(0xcd, 0x03);
-            //gpio.SetGpioFunction(0xb5, 0x00);
-            ////gp65 29h<7>=1
-            //gpio.SetGpioFunction(0x29, 0x80);
-            //gpio.SetGpioFunction(0xcd, 0x20);
-            //gpio.SetGpioFunction(0xb5, 0x00);
-
-            ////gp40
-            //gpio.SetGpioFunction(0x28, 0x01);
-            //gpio.SetGpioFunction(0xcb, 0x01);
-            //gpio.SetGpioFunction(0xb3, 0x01);
-            ////gpio.SetGpioFunction(0xb3, 0x00);
-
-            ////gp22 23
-            //gpio.SetGpioFunction(0x26, 0xff);
-            //gpio.SetGpioFunction(0xc9, 0xff);
-            //gpio.SetGpioFunction(0xb1, 0x0c);
-            ////gpio.SetGpioFunction(0xb1, 0x00);
-
             switch (type)
             {
                 case TypeEnum.Q300P:
@@ -148,9 +118,7 @@ namespace QTest.Views
             switch (type)
             {
                 case TypeEnum.Q300P:
-                    byte mval = gpio.ReadGpioPortByte(0xcf);
-                    Console.WriteLine("gpio model {0}", Utils.ByteToBinaryStr(mval));
-                    char[] models_q300p = Utils.ByteToBinaryStr(mval).ToCharArray();
+                    char[] models_q300p = Q300P.ReadGpioModel(gpio);
                     FormatGpioModel(models_q300p);
                     break;
                 case TypeEnum.Q500G6:
@@ -158,29 +126,7 @@ namespace QTest.Views
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
-                    StringBuilder sb = new StringBuilder();
-                    byte m1 = gpio.ReadGpioPortByte(0xcc);
-                    string gp56 = Utils.ByteToBinaryStr(m1).Substring(1, 1);//gp56
-                    sb.Append(gp56);
-                    string gp57 = Utils.ByteToBinaryStr(m1).Substring(0, 1);//gp57
-                    sb.Append(gp57);
-                    byte m2 = gpio.ReadGpioPortByte(0xcd);
-                    string gp60 = Utils.ByteToBinaryStr(m2).Substring(7, 1);//gp60
-                    sb.Append(gp60);
-                    string gp61 = Utils.ByteToBinaryStr(m2).Substring(6, 1);//gp61
-                    sb.Append(gp61);
-                    string gp65 = Utils.ByteToBinaryStr(m2).Substring(2,1);//gp65
-                    sb.Append(gp65);
-                    byte m3 = gpio.ReadGpioPortByte(0xcb);
-                    string gp40 = Utils.ByteToBinaryStr(m3).Substring(7,1);//gp40
-                    sb.Append(gp40);
-                    byte m4 = gpio.ReadGpioPortByte(0xc9);
-                    string gp22 = Utils.ByteToBinaryStr(m4).Substring(5,1);//gp22
-                    sb.Append(gp22);
-                    string gp23 = Utils.ByteToBinaryStr(m4).Substring(4, 1);//gp23
-                    sb.Append(gp23);
-                    Console.WriteLine("Q600P GPIO Model:" + sb.ToString());
-                    char[] models_q600p = sb.ToString().ToCharArray();
+                    char[] models_q600p = Q600P.ReadGpioModel(gpio);
                     FormatGpioModel(models_q600p);
 
                     break;
@@ -194,9 +140,7 @@ namespace QTest.Views
             switch (type)
             {
                 case TypeEnum.Q300P:
-                    byte val = gpio.ReadGpioPortByte(0xa07);
-                    Console.WriteLine("gpio value {0}", Utils.ByteToBinaryStr(val));
-                    char[] val_q300p = Utils.ByteToBinaryStr(val).ToCharArray();
+                    char[] val_q300p = Q300P.ReadGpioValues(gpio);
                     FormatGpioValue(val_q300p);
                     break;
                 case TypeEnum.Q500G6:
@@ -204,33 +148,7 @@ namespace QTest.Views
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
-                    StringBuilder sb = new StringBuilder();
-                    byte v1 = gpio.ReadGpioPortByte(0xb4);
-                    string gp56 = Utils.ByteToBinaryStr(v1).Substring(1, 1);//gp56
-                    sb.Append(gp56);
-                    string gp57 = Utils.ByteToBinaryStr(v1).Substring(0, 1);//gp57
-                    sb.Append(gp57);
-
-                    //byte v2 = gpio.ReadGpioPortByte(0xa05);
-                    byte v2 = gpio.ReadGpioPortByte(0xb5);
-                    string gp60 = Utils.ByteToBinaryStr(v2).Substring(7, 1);//gp60
-                    sb.Append(gp60);
-                    string gp61 = Utils.ByteToBinaryStr(v2).Substring(6, 1);//gp61
-                    sb.Append(gp61);
-                    string gp65 = Utils.ByteToBinaryStr(v2).Substring(2, 1);//gp65
-                    sb.Append(gp65);
-
-                    byte v3 = gpio.ReadGpioPortByte(0xb3);
-                    string gp40 = Utils.ByteToBinaryStr(v3).Substring(7, 1);//gp40
-                    sb.Append(gp40);
-                    byte v4 = gpio.ReadGpioPortByte(0xb1);
-                    string gp22 = Utils.ByteToBinaryStr(v4).Substring(5, 1);//gp22
-                    sb.Append(gp22);
-                    string gp23 = Utils.ByteToBinaryStr(v4).Substring(4, 1);//gp23
-                    sb.Append(gp23);
-
-                    Console.WriteLine("Q600P GPIO Value:" + sb.ToString());
-                    char[] val_q600p = sb.ToString().ToCharArray();
+                    char[] val_q600p = Q600P.ReadGpioValues(gpio);
                     FormatGpioValue(val_q600p);
                     break;
                 default:
@@ -244,14 +162,13 @@ namespace QTest.Views
                     combobox_type.SelectedItem.ToString(), false);
             string[] arr = { gpio1_m.Text, gpio2_m.Text, gpio3_m.Text, gpio4_m.Text,
                 gpio5_m.Text, gpio6_m.Text, gpio7_m.Text, gpio8_m.Text};
-            string gpio_m = string.Join("", arr);
-            Console.WriteLine("GPIO Model click:{0}", gpio_m);
+
+            Console.WriteLine("GPIO Model click:{0}", string.Join("", arr));
             gpio.InitSuperIO();
             switch (type)
             {
                 case TypeEnum.Q300P:
-                    byte data = Convert.ToByte(gpio_m, 2);
-                    gpio.SetGpioFunction(0xcf, data);
+                    Q300P.SetGpioModels(gpio, arr);
                     LoadGpioModel(TypeEnum.Q300P);
                     LoadGpioValue(TypeEnum.Q300P);
                     gpio.ExitSuperIo();
@@ -261,44 +178,7 @@ namespace QTest.Views
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
-                    //先取出原始数据，然后将输入框内的数据替换进来
-                    //enable gp56 57 29h<default=00>
-                    //gpio.SetGpioFunction(0x29, 0x40);
-                    gpio.SetGpioFunction(0x29, 0xc0);
-                    byte b1 = gpio.ReadGpioPortByte(0xcc);
-                    string m1 = Utils.ByteToBinaryStr(b1).Remove(0, 2).Insert(0, arr[1] + arr[0]);
-                    byte gp_data1 = Convert.ToByte(m1, 2);
-                    gpio.SetGpioFunction(0xcc, gp_data1);
-                    Console.WriteLine("-----------gp56 57 model:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xcc)));
-                    Console.WriteLine("-----------m1:" + m1);
-
-                    //enable gp60 61 65 2a<default=00>
-                    //gpio.SetGpioFunction(0x2a, 0x0b);
-                    byte b2 = gpio.ReadGpioPortByte(0xcd);
-                    //string m2 = Utils.ByteToBinaryStr(b2).Remove(2, 1).Insert(2, arr[4]).Remove(6, 2).Insert(6, arr[3] + arr[2]);
-                    string m2 = Utils.ByteToBinaryStr(b2).Remove(2, 1).Insert(2, arr[4]).Remove(6, 2).Insert(6, arr[3] + arr[2]);
-                    byte gp_data2 = Convert.ToByte(m2, 2);
-                    gpio.SetGpioFunction(0xcd, gp_data2);
-                    Console.WriteLine("-----------gp60 61 65 model:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xcd)));
-                    Console.WriteLine("-----------m2:" + m2);
-
-                    //enable gp40 28h<default=00>
-                    gpio.SetGpioFunction(0x28, 0x01);
-                    byte b3 = gpio.ReadGpioPortByte(0xcb);
-                    string m3 = Utils.ByteToBinaryStr(b3).Remove(7, 1).Insert(7, arr[5]);
-                    byte gp_data3 = Convert.ToByte(m3, 2);
-                    gpio.SetGpioFunction(0xcb, gp_data3);
-                    Console.WriteLine("-----------gp40 model:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xcb)));
-                    Console.WriteLine("-----------m3:" + m3);
-
-                    //enable gp22,23 26h<default=F3>
-                    gpio.SetGpioFunction(0x26, 0xff);
-                    byte b4 = gpio.ReadGpioPortByte(0xc9);
-                    string m4 = Utils.ByteToBinaryStr(b4).Remove(4, 2).Insert(4, arr[7] + arr[6]);
-                    byte gp_data4 = Convert.ToByte(m4, 2);
-                    gpio.SetGpioFunction(0xc9, gp_data4);
-                    Console.WriteLine("-----------gp22 23 model:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xc9)));
-                    Console.WriteLine("-----------m4:" + m4);
+                    Q600P.SetGpioModels(gpio, arr);
 
                     LoadGpioModel(TypeEnum.Q600P);
                     LoadGpioValue(TypeEnum.Q600P);
@@ -316,14 +196,14 @@ namespace QTest.Views
                     combobox_type.SelectedItem.ToString(), false);
             string[] arr = { gpio1_v.Text, gpio2_v.Text, gpio3_v.Text, gpio4_v.Text,
                 gpio5_v.Text, gpio6_v.Text, gpio7_v.Text, gpio8_v.Text};
-            string str = string.Join("", arr);
-            Console.WriteLine("GPIO Value click:{0}", str);
+
+            Console.WriteLine("GPIO Value click:{0}", string.Join("", arr));
             gpio.InitSuperIO();
             switch (type)
             {
                 case TypeEnum.Q300P:
-                    byte data = Convert.ToByte(str, 2);
-                    gpio.SetGpioFunction(0xa07, data);
+                    Q300P.SetGpioValues(gpio, arr);
+                    LoadGpioModel(TypeEnum.Q300P);
                     LoadGpioValue(TypeEnum.Q300P);
                     gpio.ExitSuperIo();
                     break;
@@ -332,45 +212,7 @@ namespace QTest.Views
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
-                    //先取出原始数据，然后将输入框内的数据替换进来
-                    //enable gp56 57 29h<default=00>
-                    //gpio.SetGpioFunction(0x29, 0x40);
-                    gpio.SetGpioFunction(0x29, 0xc0);//gp56 56 60 61 62 65 enable
-                    byte b1 = gpio.ReadGpioPortByte(0xb4);
-                    string v1 = Utils.ByteToBinaryStr(b1).Remove(0, 2).Insert(0, arr[1] + arr[0]);
-                    byte gp_data1 = Convert.ToByte(v1, 2);
-                    gpio.SetGpioFunction(0xb4, gp_data1);
-                    Console.WriteLine("-----------gp56 57:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xb4)));
-                    Console.WriteLine("-----------v1:" + v1);
-
-                    //enable gp60 61 65 2a<default=00>
-                    //gpio.SetGpioFunction(0x2a, 0x0b);
-                    //byte b2 = gpio.ReadGpioPortByte(0xa05);
-                    byte b2 = gpio.ReadGpioPortByte(0xb5);
-                    string v2 = Utils.ByteToBinaryStr(b2).Remove(2, 1).Insert(2, arr[4]).Remove(6, 2).Insert(6, arr[3] + arr[2]);
-                    byte gp_data2 = Convert.ToByte(v2, 2);
-                    //gpio.SetGpioFunction(0xa05, gp_data2);
-                    gpio.SetGpioFunction(0xb5, gp_data2);
-                    Console.WriteLine("-----------gp60 61 65:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xa05)));
-                    Console.WriteLine("-----------v2:" + v2);
-
-                    //enable gp40 28h<default=00>
-                    gpio.SetGpioFunction(0x28, 0x01);
-                    byte b3 = gpio.ReadGpioPortByte(0xb3);
-                    string v3 = Utils.ByteToBinaryStr(b3).Remove(7, 1).Insert(7, arr[5]);
-                    byte gp_data3 = Convert.ToByte(v3, 2);
-                    gpio.SetGpioFunction(0xb3, gp_data3);
-                    Console.WriteLine("-----------gp40:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xb3)));
-                    Console.WriteLine("-----------v3:" + v3);
-
-                    //enable gp22,23 26h<default=F3>
-                    gpio.SetGpioFunction(0x26, 0xff);
-                    byte b4 = gpio.ReadGpioPortByte(0xb1);
-                    string v4 = Utils.ByteToBinaryStr(b4).Remove(4, 2).Insert(4, arr[7] + arr[6]);
-                    byte gp_data4 = Convert.ToByte(v4, 2);
-                    gpio.SetGpioFunction(0xb1, gp_data4);
-                    Console.WriteLine("-----------gp22 23:" + Utils.ByteToBinaryStr(gpio.ReadGpioPortByte(0xb1)));
-                    Console.WriteLine("-----------v4:" + v4);
+                    Q600P.SetGpioValues(gpio, arr);
 
                     LoadGpioModel(TypeEnum.Q600P);
                     LoadGpioValue(TypeEnum.Q600P);

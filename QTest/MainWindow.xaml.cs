@@ -91,6 +91,6 @@ namespace QTest
         {
             DataContext = new SerialTest();
         }
-        
+
     }
 }

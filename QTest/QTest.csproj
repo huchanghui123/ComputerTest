@@ -73,6 +73,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GPIO\Q300P.cs" />
+    <Compile Include="GPIO\Q600P.cs" />
     <Compile Include="instances\BaseData.cs" />
     <Compile Include="instances\MainBoardData.cs" />
     <Compile Include="instances\MyWaveOut.cs" />

@@ -60,8 +60,8 @@
                 <TextBox x:Name="gpio8_v" Width="30" Canvas.Top="200" Canvas.Left="200" MaxLength="1"
                          InputMethod.IsInputMethodEnabled="False" PreviewTextInput="Gpio_PreviewTextInput"/>
                 <TextBlock Text=" " Canvas.Top="220" />
-                <Button x:Name="model_btn" Content="Confirm"  Width="50" Click="Model_btn_Click" Canvas.Top="220" Canvas.Left="100" />
-                <Button x:Name="val_btn"  Content="Confirm" Width="50" Click="Val_btn_Click" Canvas.Top="220" Canvas.Left="200" />
+                <Button x:Name="model_btn" Content="Confirm"  Width="50" Click="Model_btn_Click" IsEnabled="False" Canvas.Top="220" Canvas.Left="100" />
+                <Button x:Name="val_btn"  Content="Confirm" Width="50" Click="Val_btn_Click" IsEnabled="False" Canvas.Top="220" Canvas.Left="200" />
             </Canvas>
             
         </StackPanel>
