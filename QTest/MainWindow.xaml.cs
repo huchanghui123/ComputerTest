@@ -92,5 +92,9 @@ namespace QTest
             DataContext = new SerialTest();
         }
 
+        private void NetworkInfo(object sender, RoutedEventArgs e)
+        {
+            DataContext = new NetworkInfo();
+        }
     }
 }

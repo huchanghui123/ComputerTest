@@ -98,6 +98,8 @@ namespace QTest.Views
                     break;
                 case TypeEnum.Q500G6:
                     Console.WriteLine("Q500G6...............");
+                    LoadGpioModel(TypeEnum.Q500G6);
+                    LoadGpioValue(TypeEnum.Q500G6);
                     break;
                 case TypeEnum.Q500X:
                     Console.WriteLine("Q500X...............");
@@ -122,13 +124,14 @@ namespace QTest.Views
                     FormatGpioModel(models_q300p);
                     break;
                 case TypeEnum.Q500G6:
+                    char[] models_q500g6 = Q500G6.ReadGpioModel(gpio);
+                    FormatGpioModel(models_q500g6);
                     break;
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
                     char[] models_q600p = Q600P.ReadGpioModel(gpio);
                     FormatGpioModel(models_q600p);
-
                     break;
                 default:
                     break;
@@ -144,6 +147,8 @@ namespace QTest.Views
                     FormatGpioValue(val_q300p);
                     break;
                 case TypeEnum.Q500G6:
+                    char[] val_q500g6 = Q500G6.ReadGpioValues(gpio);
+                    FormatGpioValue(val_q500g6);
                     break;
                 case TypeEnum.Q500X:
                     break;
@@ -174,15 +179,17 @@ namespace QTest.Views
                     gpio.ExitSuperIo();
                     break;
                 case TypeEnum.Q500G6:
+                    Q500G6.SetGpioModels(gpio, arr);
+                    LoadGpioModel(TypeEnum.Q500G6);
+                    LoadGpioValue(TypeEnum.Q500G6);
+                    gpio.ExitSuperIo();
                     break;
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
                     Q600P.SetGpioModels(gpio, arr);
-
                     LoadGpioModel(TypeEnum.Q600P);
                     LoadGpioValue(TypeEnum.Q600P);
-
                     gpio.ExitSuperIo();
                     break;
                 default:
@@ -208,6 +215,10 @@ namespace QTest.Views
                     gpio.ExitSuperIo();
                     break;
                 case TypeEnum.Q500G6:
+                    Q500G6.SetGpioValues(gpio, arr);
+                    LoadGpioModel(TypeEnum.Q500G6);
+                    LoadGpioValue(TypeEnum.Q500G6);
+                    gpio.ExitSuperIo();
                     break;
                 case TypeEnum.Q500X:
                     break;

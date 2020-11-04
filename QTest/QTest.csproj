@@ -74,6 +74,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="GPIO\Q300P.cs" />
+    <Compile Include="GPIO\Q500G6.cs" />
     <Compile Include="GPIO\Q600P.cs" />
     <Compile Include="instances\BaseData.cs" />
     <Compile Include="instances\MainBoardData.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Models\AudioTest.cs" />
     <Compile Include="Models\GPIOTools.cs" />
     <Compile Include="Models\Motherborad.cs" />
+    <Compile Include="Models\NetworkInfo.cs" />
     <Compile Include="Models\Sensor.cs" />
     <Compile Include="Models\SerialTest.cs" />
     <Compile Include="Models\Summary.cs" />
@@ -103,6 +105,9 @@
     </Compile>
     <Compile Include="Views\MotherboardView.xaml.cs">
       <DependentUpon>MotherboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NetWorkInfoView.xaml.cs">
+      <DependentUpon>NetWorkInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SensorView.xaml.cs">
       <DependentUpon>SensorView.xaml</DependentUpon>
@@ -143,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MotherboardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NetWorkInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

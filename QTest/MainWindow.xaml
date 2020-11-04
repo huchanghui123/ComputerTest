@@ -27,6 +27,9 @@
         <DataTemplate x:Name="mbTemplate" DataType="{x:Type models:Motherborad}">
             <views:MotherboardView DataContext="{Binding}" />
         </DataTemplate>
+        <DataTemplate x:Name="netTemplate" DataType="{x:Type models:NetworkInfo}">
+            <views:NetWorkInfoView DataContext="{Binding}" />
+        </DataTemplate>
         <DataTemplate x:Name="audioTemplate" DataType="{x:Type models:AudioTest}">
             <views:AudioTestView DataContext="{Binding}" />
         </DataTemplate>
@@ -150,6 +153,16 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Source="Resources\mainboard.png" Margin="0,0,5,0"/>
                             <TextBlock Text="主板" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeViewItem.HeaderTemplate>
+            </TreeViewItem>
+            <TreeViewItem Selected="NetworkInfo">
+                <TreeViewItem.HeaderTemplate>
+                    <HierarchicalDataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="20" Height="20" Source="Resources\Network.png" Margin="0,0,5,0"/>
+                            <TextBlock Text="网络设备" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeViewItem.HeaderTemplate>
