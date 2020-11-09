@@ -12,7 +12,6 @@ namespace QTest.GPIO
         public static char[] ReadGpioModel(SuperIO gpio)
         {
             byte mval = gpio.ReadGpioPortByte(0xcf);
-            Console.WriteLine("gpio model {0}", Utils.ByteToBinaryStr(mval));
             char[] models_q300p = Utils.ByteToBinaryStr(mval).ToCharArray();
             return models_q300p;
         }

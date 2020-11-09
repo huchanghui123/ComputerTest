@@ -1,7 +1,6 @@
 ﻿using QTest.GPIO;
 using QTest.Tools;
 using System;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +14,7 @@ namespace QTest.Views
     /// </summary>
     public partial class GPIOView : UserControl
     {
+        public static TextBox logTox;
         public enum TypeEnum
         {
             Q300P = 0,
@@ -28,6 +28,7 @@ namespace QTest.Views
         public GPIOView()
         {
             InitializeComponent();
+            logTox = this.log_box;
         }
 
         private void GPIO_Loaded(object sender, RoutedEventArgs e)
@@ -58,7 +59,7 @@ namespace QTest.Views
 
         private void Minipc_type_DropDownClosed(object sender, EventArgs e)
         {
-            Console.WriteLine("Minipc_type_DropDownClosed........." + combobox_type.Text);
+            log_box.Text = "MiniPC Type: " + combobox_type.Text;
             if(combobox_type.Text.Length == 0)
             {
                 return;
@@ -88,27 +89,24 @@ namespace QTest.Views
 
         private void LoadGpioData(TypeEnum type)
         {
+            log_box.AppendText("\r\n");
+            log_box.AppendText("Load " + type.ToString() + " GPIO Data.");
             switch (type)
             {
                 case TypeEnum.Q300P:
-                    Console.WriteLine("Q300P...............");
                     gpio.SetGpioFunction(0x2c, 0x89);
                     LoadGpioModel(TypeEnum.Q300P);
                     LoadGpioValue(TypeEnum.Q300P);
                     break;
                 case TypeEnum.Q500G6:
-                    Console.WriteLine("Q500G6...............");
                     LoadGpioModel(TypeEnum.Q500G6);
                     LoadGpioValue(TypeEnum.Q500G6);
                     break;
                 case TypeEnum.Q500X:
-                    Console.WriteLine("Q500X...............");
                     break;
                 case TypeEnum.Q600P:
-                    Console.WriteLine("Q600P...............");
                     LoadGpioModel(TypeEnum.Q600P);
                     LoadGpioValue(TypeEnum.Q600P);
-
                     break;
                 default:
                     break;
@@ -121,16 +119,19 @@ namespace QTest.Views
             {
                 case TypeEnum.Q300P:
                     char[] models_q300p = Q300P.ReadGpioModel(gpio);
+                    log_box.Text += "\r\n" +type.ToString()+" GPIO Output/Input: "+ string.Join("", models_q300p);
                     FormatGpioModel(models_q300p);
                     break;
                 case TypeEnum.Q500G6:
                     char[] models_q500g6 = Q500G6.ReadGpioModel(gpio);
+                    log_box.Text += "\r\n" + type.ToString() + " GPIO Output/Input: " + string.Join("", models_q500g6);
                     FormatGpioModel(models_q500g6);
                     break;
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
                     char[] models_q600p = Q600P.ReadGpioModel(gpio);
+                    log_box.Text += "\r\n" + type.ToString() + " GPIO Output/Input: " + string.Join("", models_q600p);
                     FormatGpioModel(models_q600p);
                     break;
                 default:
@@ -144,16 +145,19 @@ namespace QTest.Views
             {
                 case TypeEnum.Q300P:
                     char[] val_q300p = Q300P.ReadGpioValues(gpio);
+                    log_box.Text += "\r\n" + type.ToString() + " GPIO Pin polarity: " + string.Join("", val_q300p);
                     FormatGpioValue(val_q300p);
                     break;
                 case TypeEnum.Q500G6:
                     char[] val_q500g6 = Q500G6.ReadGpioValues(gpio);
+                    log_box.Text += "\r\n" + type.ToString() + " GPIO Pin polarity: " + string.Join("", val_q500g6);
                     FormatGpioValue(val_q500g6);
                     break;
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
                     char[] val_q600p = Q600P.ReadGpioValues(gpio);
+                    log_box.Text += "\r\n" + type.ToString() + " GPIO Pin polarity: " + string.Join("", val_q600p);
                     FormatGpioValue(val_q600p);
                     break;
                 default:
@@ -165,21 +169,22 @@ namespace QTest.Views
         {
             TypeEnum type = (TypeEnum)Enum.Parse(typeof(TypeEnum),
                     combobox_type.SelectedItem.ToString(), false);
-            string[] arr = { gpio1_m.Text, gpio2_m.Text, gpio3_m.Text, gpio4_m.Text,
+            string[] data = { gpio1_m.Text, gpio2_m.Text, gpio3_m.Text, gpio4_m.Text,
                 gpio5_m.Text, gpio6_m.Text, gpio7_m.Text, gpio8_m.Text};
 
-            Console.WriteLine("GPIO Model click:{0}", string.Join("", arr));
+            log_box.AppendText("\r\n");
+            log_box.AppendText("GPIO Output/Input Click ================>>>" + string.Join("", data));
             gpio.InitSuperIO();
             switch (type)
             {
                 case TypeEnum.Q300P:
-                    Q300P.SetGpioModels(gpio, arr);
+                    Q300P.SetGpioModels(gpio, data);
                     LoadGpioModel(TypeEnum.Q300P);
                     LoadGpioValue(TypeEnum.Q300P);
                     gpio.ExitSuperIo();
                     break;
                 case TypeEnum.Q500G6:
-                    Q500G6.SetGpioModels(gpio, arr);
+                    Q500G6.SetGpioModels(gpio, data ,this);
                     LoadGpioModel(TypeEnum.Q500G6);
                     LoadGpioValue(TypeEnum.Q500G6);
                     gpio.ExitSuperIo();
@@ -187,7 +192,7 @@ namespace QTest.Views
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
-                    Q600P.SetGpioModels(gpio, arr);
+                    Q600P.SetGpioModels(gpio, data, this);
                     LoadGpioModel(TypeEnum.Q600P);
                     LoadGpioValue(TypeEnum.Q600P);
                     gpio.ExitSuperIo();
@@ -201,21 +206,22 @@ namespace QTest.Views
         {
             TypeEnum type = (TypeEnum)Enum.Parse(typeof(TypeEnum),
                     combobox_type.SelectedItem.ToString(), false);
-            string[] arr = { gpio1_v.Text, gpio2_v.Text, gpio3_v.Text, gpio4_v.Text,
+            string[] data = { gpio1_v.Text, gpio2_v.Text, gpio3_v.Text, gpio4_v.Text,
                 gpio5_v.Text, gpio6_v.Text, gpio7_v.Text, gpio8_v.Text};
 
-            Console.WriteLine("GPIO Value click:{0}", string.Join("", arr));
+            log_box.AppendText("\r\n");
+            log_box.AppendText("GPIO Pin polarity Click ================>>>" + string.Join("", data));
             gpio.InitSuperIO();
             switch (type)
             {
                 case TypeEnum.Q300P:
-                    Q300P.SetGpioValues(gpio, arr);
+                    Q300P.SetGpioValues(gpio, data);
                     LoadGpioModel(TypeEnum.Q300P);
                     LoadGpioValue(TypeEnum.Q300P);
                     gpio.ExitSuperIo();
                     break;
                 case TypeEnum.Q500G6:
-                    Q500G6.SetGpioValues(gpio, arr);
+                    Q500G6.SetGpioValues(gpio, data, this);
                     LoadGpioModel(TypeEnum.Q500G6);
                     LoadGpioValue(TypeEnum.Q500G6);
                     gpio.ExitSuperIo();
@@ -223,11 +229,9 @@ namespace QTest.Views
                 case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
-                    Q600P.SetGpioValues(gpio, arr);
-
+                    Q600P.SetGpioValues(gpio, data, this);
                     LoadGpioModel(TypeEnum.Q600P);
                     LoadGpioValue(TypeEnum.Q600P);
-
                     gpio.ExitSuperIo();
                     break;
                 default:

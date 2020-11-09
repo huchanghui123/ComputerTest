@@ -62,8 +62,11 @@
                 <TextBlock Text=" " Canvas.Top="220" />
                 <Button x:Name="model_btn" Content="Confirm"  Width="50" Click="Model_btn_Click" IsEnabled="False" Canvas.Top="220" Canvas.Left="100" />
                 <Button x:Name="val_btn"  Content="Confirm" Width="50" Click="Val_btn_Click" IsEnabled="False" Canvas.Top="220" Canvas.Left="200" />
+                <TextBlock Canvas.Top="250" Text="日志："/>
+                <TextBox x:Name="log_box" TextWrapping="Wrap" 
+                         Canvas.Top="270" Width="500" Height="300"
+                         VerticalScrollBarVisibility="Visible"/>
             </Canvas>
-            
         </StackPanel>
     </Grid>
 </UserControl>
