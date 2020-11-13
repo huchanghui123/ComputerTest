@@ -430,8 +430,6 @@ namespace QTest.Tools
             {
                 foreach (NetworkInterface adapter in adapters)
                 {
-                    //Console.WriteLine(adapter.Description);
-                    //Console.WriteLine(adapter.NetworkInterfaceType.ToString());
                     if (adapter.Description.Equals(adapterName))
                     {
                         UnicastIPAddressInformationCollection unicastIPAddressInformation = adapter.GetIPProperties().UnicastAddresses;
@@ -453,7 +451,180 @@ namespace QTest.Tools
             {
                 return String.Empty;
             }
-            
+        }
+
+
+        public static List<NetWork> GetNetWorkAdpter()
+        {
+            try
+            {
+                List<NetWork> net_list = new List<NetWork>();
+                ManagementClass mc = new ManagementClass("Win32_NetworkAdapter");
+                ManagementObjectCollection moc = mc.GetInstances();
+                String adapter = String.Empty;
+
+                foreach (ManagementObject m in moc)
+                {
+                    try
+                    {
+                        string adpter = m.Properties["Name"].Value.ToString();
+                        if (Boolean.Parse(m.Properties["PhysicalAdapter"].Value.ToString()) == true)
+                        {
+                            net_list.Add(new NetWork(adpter, "..\\Resources\\ethernet_32px.png"));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+
+                return net_list;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
+        public static List<NetWork> GetNetWorkAdpterInfo(string adapter)
+        {
+            try
+            {
+                List<NetWork> net_list_info = new List<NetWork>();
+
+                ManagementClass mc = new ManagementClass("Win32_NetworkAdapter");
+                ManagementObjectCollection moc = mc.GetInstances();
+                String name = String.Empty;
+
+                foreach (ManagementObject m in moc)
+                {
+                    try
+                    {
+                        name = m.Properties["Name"].Value.ToString();
+                        if (Boolean.Parse(m.Properties["PhysicalAdapter"].Value.ToString()) == true)
+                        {
+                            if (adapter.Equals(name))
+                            {
+                                NetWorkInfo nwi = GetNetWorkInfoForAdapter(adapter);
+
+                                net_list_info.Add(new NetWork("网络适配器信息", "..\\Resources\\ethernet_32px.png"));
+                                net_list_info.Add(new NetWork("网络适配器", "..\\Resources\\ethernet_32px.png", name)); 
+                                net_list_info.Add(new NetWork("接口类型", "..\\Resources\\ethernet_32px.png", m.Properties["AdapterType"].Value.ToString()));
+                                net_list_info.Add(new NetWork("硬件地址(MAC)", "..\\Resources\\ethernet_32px.png", m.Properties["MACAddress"].Value.ToString()));
+                                net_list_info.Add(new NetWork("连接名称", "..\\Resources\\ethernet_32px.png", nwi.Name));
+
+                                int flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
+                                string status = "已断开";
+                                if(flag == 2)
+                                {
+                                    status = "已连接";
+                                }
+                                net_list_info.Add(new NetWork("连接状态", "..\\Resources\\ethernet_32px.png", status));
+
+                                net_list_info.Add(new NetWork("网络适配器地址", "..\\Resources\\ethernet_32px.png"));
+                                if(!string.IsNullOrEmpty(nwi.Ip) && nwi.Ip.Length > 0)
+                                {
+                                    net_list_info.Add(new NetWork("IP 地址", "..\\Resources\\ethernet_32px.png", nwi.Ip));
+                                }
+                                if(!string.IsNullOrEmpty(nwi.Mask) && nwi.Mask.Length > 0)
+                                {
+                                    net_list_info.Add(new NetWork("子网掩码", "..\\Resources\\ethernet_32px.png", nwi.Mask));
+                                }
+                                if(!string.IsNullOrEmpty(nwi.GateWay) && nwi.GateWay.Length > 0)
+                                {
+                                    net_list_info.Add(new NetWork("网关地址", "..\\Resources\\ethernet_32px.png", nwi.GateWay));
+                                }
+                                if(!string.IsNullOrEmpty(nwi.DNS1) && nwi.DNS1.Length > 0)
+                                {
+                                    net_list_info.Add(new NetWork("主DNS地址", "..\\Resources\\ethernet_32px.png", nwi.DNS1));
+                                }
+                                if(!string.IsNullOrEmpty(nwi.DNS2) && nwi.DNS2.Length > 0)
+                                {
+                                    net_list_info.Add(new NetWork("备用DNS地址", "..\\Resources\\ethernet_32px.png", nwi.DNS2));
+                                }
+
+                                net_list_info.Add(new NetWork("网络适配器制造商", "..\\Resources\\ethernet_32px.png"));
+                                string Manufacturer = m.Properties["Manufacturer"].Value.ToString();
+                                net_list_info.Add(new NetWork("公司名称", "..\\Resources\\ethernet_32px.png", Manufacturer));
+                                if(Manufacturer.ToLower().IndexOf("vmware") > -1)
+                                {
+                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.vmware.com"));
+                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "https://www.vmware.com"));
+                                }
+                                else if (Manufacturer.ToLower().IndexOf("intel") > -1)
+                                {
+                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.intel.com/content/www/us/en/products/network-io.html"));
+                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "https://www.intel.com/support/network"));
+                                }
+                                else if (Manufacturer.ToLower().IndexOf("realtek") > -1)
+                                {
+                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.realtek.com/zh-tw/products/communications-network-ics"));
+                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "https://www.realtek.com/zh-tw/component/zoo/advanced-search/26?Itemid=283"));
+                                }
+                                else
+                                {
+                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "unknow"));
+                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "unknow"));
+                                }
+                                
+                            }
+                            
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
+
+                return net_list_info;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static NetWorkInfo GetNetWorkInfoForAdapter(string adapterName)
+        {
+            NetWorkInfo nwi = null;
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+            foreach(NetworkInterface adapter in nics)
+            {
+                //判断是否以太网连接
+                bool isEthernet = (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet);
+                Console.WriteLine(adapter.Name +" " + adapter.Description + " " + isEthernet);
+                if(isEthernet && adapter.Description.Equals(adapterName))
+                {
+                    nwi = new NetWorkInfo();
+                    nwi.Name = adapter.Name;
+                    IPInterfaceProperties ip = adapter.GetIPProperties();
+                    if(ip.UnicastAddresses.Count > 0)
+                    {
+                        nwi.Ip = ip.UnicastAddresses[0].Address.ToString();
+                        nwi.Mask = ip.UnicastAddresses[0].IPv4Mask.ToString();
+                    }
+                    if(ip.GatewayAddresses.Count > 0)
+                    {
+                        nwi.GateWay = ip.GatewayAddresses[0].Address.ToString();
+                    }
+                    int DnsCount = ip.DnsAddresses.Count;
+                    Console.WriteLine("DnsCount:"+ DnsCount);
+                    if(DnsCount == 1)
+                    {
+                        nwi.DNS1 = ip.DnsAddresses[0].ToString();
+                    }
+                    if (DnsCount == 2)
+                    {
+                        nwi.DNS1 = ip.DnsAddresses[0].ToString();
+                        nwi.DNS2 = ip.DnsAddresses[1].ToString();
+                    }
+                }
+            }
+            return nwi;
         }
 
     }

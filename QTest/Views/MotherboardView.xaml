@@ -33,9 +33,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-
                     <GridViewColumn Header="当前值" Width="500" DisplayMemberBinding="{Binding Path=Value}"  />
-
                 </GridView>
             </ListView.View>
         </ListView>

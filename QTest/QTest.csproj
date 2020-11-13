@@ -79,6 +79,8 @@
     <Compile Include="instances\BaseData.cs" />
     <Compile Include="instances\MainBoardData.cs" />
     <Compile Include="instances\MyWaveOut.cs" />
+    <Compile Include="instances\NetWork.cs" />
+    <Compile Include="instances\NetWorkInfo.cs" />
     <Compile Include="instances\OpenLibSys.cs" />
     <Compile Include="instances\SensorData.cs" />
     <Compile Include="Models\AudioTest.cs" />
@@ -267,6 +269,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\audio_test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ethernet_32px.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,7 +6,73 @@
              xmlns:local="clr-namespace:QTest.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="650">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}" x:Key="GridViewColumnStyle" >
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <TextBlock Text="Networkinfo" />
+        <!--5行-->
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--5列-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="NetWorkView" BorderThickness="0,0,0,1" BorderBrush="#FFC8CCD4" 
+                  Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="5" SelectionChanged="NetWorkView_SelectionChanged">
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnStyle}">
+                    <GridViewColumn Header="网络设备描述" Width="400">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <!--imag为空什么都不显示-->
+                                    <Image x:Name="adapter_img" Source="{Binding Path=Image, TargetNullValue={x:Null}}" Width="20" Height="20"/>
+                                    <TextBlock x:Name="adapter_title" Text="{Binding Path=NetDevice}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView x:Name="NetInfoView" BorderThickness="0,0,0,1" BorderBrush="#FFC8CCD4" 
+                  Grid.Row="2" Grid.RowSpan="6" Grid.Column="0" Grid.ColumnSpan="5">
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnStyle}">
+                    <GridViewColumn Header="   项目" Width="180">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                    <Image x:Name="title_img" Source="{Binding Path=Image, TargetNullValue={x:Null}}" Width="20" Height="20"/>
+                                    <TextBlock x:Name="title" Text="{Binding Path=NetDevice}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                </StackPanel>
+                                <!-- 如果Value为空 -->
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding Path=Value.Length, FallbackValue=0, TargetNullValue=0}" Value="0">
+                                        <Setter TargetName="title_img" Property="Margin" Value="-20,0,0,0" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="当前值" Width="500" DisplayMemberBinding="{Binding Path=Value}"  />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </UserControl>

@@ -19,7 +19,6 @@ namespace QTest.Views
         {
             Q300P = 0,
             Q500G6,
-            Q500X,
             Q600P
         }
         private bool dirverStatus = false;
@@ -102,8 +101,6 @@ namespace QTest.Views
                     LoadGpioModel(TypeEnum.Q500G6);
                     LoadGpioValue(TypeEnum.Q500G6);
                     break;
-                case TypeEnum.Q500X:
-                    break;
                 case TypeEnum.Q600P:
                     LoadGpioModel(TypeEnum.Q600P);
                     LoadGpioValue(TypeEnum.Q600P);
@@ -126,8 +123,6 @@ namespace QTest.Views
                     char[] models_q500g6 = Q500G6.ReadGpioModel(gpio);
                     log_box.Text += "\r\n" + type.ToString() + " GPIO Output/Input: " + string.Join("", models_q500g6);
                     FormatGpioModel(models_q500g6);
-                    break;
-                case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
                     char[] models_q600p = Q600P.ReadGpioModel(gpio);
@@ -153,8 +148,6 @@ namespace QTest.Views
                     log_box.Text += "\r\n" + type.ToString() + " GPIO Pin polarity: " + string.Join("", val_q500g6);
                     FormatGpioValue(val_q500g6);
                     break;
-                case TypeEnum.Q500X:
-                    break;
                 case TypeEnum.Q600P:
                     char[] val_q600p = Q600P.ReadGpioValues(gpio);
                     log_box.Text += "\r\n" + type.ToString() + " GPIO Pin polarity: " + string.Join("", val_q600p);
@@ -171,6 +164,14 @@ namespace QTest.Views
                     combobox_type.SelectedItem.ToString(), false);
             string[] data = { gpio1_m.Text, gpio2_m.Text, gpio3_m.Text, gpio4_m.Text,
                 gpio5_m.Text, gpio6_m.Text, gpio7_m.Text, gpio8_m.Text};
+            foreach(string str in data)
+            {
+                if(str.Trim().Length == 0)
+                {
+                    MessageBox.Show("不能输入空字符！", "ERROR");
+                    return;
+                }
+            }
 
             log_box.AppendText("\r\n");
             log_box.AppendText("GPIO Output/Input Click ================>>>" + string.Join("", data));
@@ -188,8 +189,6 @@ namespace QTest.Views
                     LoadGpioModel(TypeEnum.Q500G6);
                     LoadGpioValue(TypeEnum.Q500G6);
                     gpio.ExitSuperIo();
-                    break;
-                case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
                     Q600P.SetGpioModels(gpio, data, this);
@@ -209,6 +208,15 @@ namespace QTest.Views
             string[] data = { gpio1_v.Text, gpio2_v.Text, gpio3_v.Text, gpio4_v.Text,
                 gpio5_v.Text, gpio6_v.Text, gpio7_v.Text, gpio8_v.Text};
 
+            foreach (string str in data)
+            {
+                if (str.Trim().Length == 0)
+                {
+                    MessageBox.Show("不能输入空字符！", "ERROR");
+                    return;
+                }
+            }
+
             log_box.AppendText("\r\n");
             log_box.AppendText("GPIO Pin polarity Click ================>>>" + string.Join("", data));
             gpio.InitSuperIO();
@@ -225,8 +233,6 @@ namespace QTest.Views
                     LoadGpioModel(TypeEnum.Q500G6);
                     LoadGpioValue(TypeEnum.Q500G6);
                     gpio.ExitSuperIo();
-                    break;
-                case TypeEnum.Q500X:
                     break;
                 case TypeEnum.Q600P:
                     Q600P.SetGpioValues(gpio, data, this);
@@ -265,7 +271,7 @@ namespace QTest.Views
 
         private void Gpio_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            Regex re = new Regex("[^0-1]$");
+            Regex re = new Regex("^[^0-1]$");
             e.Handled = re.IsMatch(e.Text);
         }
 
