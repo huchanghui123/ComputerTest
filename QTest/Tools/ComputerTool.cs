@@ -1,13 +1,10 @@
 ﻿using QTest.instances;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace QTest.Tools
 {
@@ -362,6 +359,7 @@ namespace QTest.Tools
                 string status = String.Empty;
                 bool netEnabled = false;
                 string ipaddress = String.Empty;
+                string temp = String.Empty;
                 foreach (ManagementObject m in moc)
                 {
                     try
@@ -371,8 +369,14 @@ namespace QTest.Tools
                     catch (Exception)
                     {
                     }
-                    
-                    if (type.Length>3 && type.Substring(0,3) == "PCI")
+
+                    temp += type + " " + m.Properties["PhysicalAdapter"].Value.ToString() + "\r\n";
+                    //Console.WriteLine(type + " " +  m.Properties["PhysicalAdapter"].Value.ToString());
+                    if (type.Length>3 && 
+                        (type.Substring(0,3) == "PCI"|| 
+                        type.Substring(0, 3) == "USB"|| 
+                        type.Substring(0, 3) == "BTH") && 
+                        Boolean.Parse(m.Properties["PhysicalAdapter"].Value.ToString()))
                     {
                         try
                         {
@@ -385,7 +389,19 @@ namespace QTest.Tools
                         {
                         }
                         
-                        net_list.Add(new BaseData("PCI物理网卡", "..\\Resources\\Network.png", 0));
+                        if(type.Substring(0, 3) == "PCI")
+                        {
+                            net_list.Add(new BaseData("PCI物理网卡", "..\\Resources\\Network.png", 0));
+                        }
+                        else if(type.Substring(0, 3) == "USB")
+                        {
+                            net_list.Add(new BaseData("USB物理网卡", "..\\Resources\\Network.png", 0));
+                        }
+                        else if (type.Substring(0, 3) == "BTH")
+                        {
+                            net_list.Add(new BaseData("蓝牙适配器", "..\\Resources\\Network.png", 0));
+                        }
+                        
                         net_list.Add(new BaseData("适配器", Name));
                         net_list.Add(new BaseData("MAC", MACAddress));
                         
@@ -410,7 +426,8 @@ namespace QTest.Tools
                         }
                     }
                 }
-                
+                //MessageBox.Show(temp);
+
                 mc = null;
                 moc.Dispose();
                 return net_list;
@@ -422,36 +439,7 @@ namespace QTest.Tools
             }
         }
 
-        public static string GetIPv4Address(string adapterName)
-        {
-            String IPAddress = String.Empty;
-            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
-            try
-            {
-                foreach (NetworkInterface adapter in adapters)
-                {
-                    if (adapter.Description.Equals(adapterName))
-                    {
-                        UnicastIPAddressInformationCollection unicastIPAddressInformation = adapter.GetIPProperties().UnicastAddresses;
-                        if (unicastIPAddressInformation.Count > 0)
-                        {
-                            foreach (var item in unicastIPAddressInformation)
-                            {
-                                if (item.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                                {
-                                    IPAddress = item.Address.ToString();
-                                }
-                            }
-                        }
-                    }
-                }
-                return IPAddress;
-            }
-            catch (Exception)
-            {
-                return String.Empty;
-            }
-        }
+        
 
 
         public static List<NetWork> GetNetWorkAdpter()
@@ -513,37 +501,41 @@ namespace QTest.Tools
                                 net_list_info.Add(new NetWork("网络适配器", "..\\Resources\\ethernet_32px.png", name)); 
                                 net_list_info.Add(new NetWork("接口类型", "..\\Resources\\ethernet_32px.png", m.Properties["AdapterType"].Value.ToString()));
                                 net_list_info.Add(new NetWork("硬件地址(MAC)", "..\\Resources\\ethernet_32px.png", m.Properties["MACAddress"].Value.ToString()));
-                                net_list_info.Add(new NetWork("连接名称", "..\\Resources\\ethernet_32px.png", nwi.Name));
+                                if(nwi != null)
+                                {
+                                    net_list_info.Add(new NetWork("连接名称", "..\\Resources\\ethernet_32px.png", nwi.Name));
 
-                                int flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
-                                string status = "已断开";
-                                if(flag == 2)
-                                {
-                                    status = "已连接";
-                                }
-                                net_list_info.Add(new NetWork("连接状态", "..\\Resources\\ethernet_32px.png", status));
+                                    int flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
+                                    string status = "已断开";
+                                    if (flag == 2)
+                                    {
+                                        status = "已连接";
+                                    }
+                                    net_list_info.Add(new NetWork("连接状态", "..\\Resources\\ethernet_32px.png", status));
 
-                                net_list_info.Add(new NetWork("网络适配器地址", "..\\Resources\\ethernet_32px.png"));
-                                if(!string.IsNullOrEmpty(nwi.Ip) && nwi.Ip.Length > 0)
-                                {
-                                    net_list_info.Add(new NetWork("IP 地址", "..\\Resources\\ethernet_32px.png", nwi.Ip));
+                                    net_list_info.Add(new NetWork("网络适配器地址", "..\\Resources\\ethernet_32px.png"));
+                                    if (!string.IsNullOrEmpty(nwi.Ip) && nwi.Ip.Length > 0)
+                                    {
+                                        net_list_info.Add(new NetWork("IP 地址", "..\\Resources\\ethernet_32px.png", nwi.Ip));
+                                    }
+                                    if (!string.IsNullOrEmpty(nwi.Mask) && nwi.Mask.Length > 0)
+                                    {
+                                        net_list_info.Add(new NetWork("子网掩码", "..\\Resources\\ethernet_32px.png", nwi.Mask));
+                                    }
+                                    if (!string.IsNullOrEmpty(nwi.GateWay) && nwi.GateWay.Length > 0)
+                                    {
+                                        net_list_info.Add(new NetWork("网关地址", "..\\Resources\\ethernet_32px.png", nwi.GateWay));
+                                    }
+                                    if (!string.IsNullOrEmpty(nwi.DNS1) && nwi.DNS1.Length > 0)
+                                    {
+                                        net_list_info.Add(new NetWork("主DNS地址", "..\\Resources\\ethernet_32px.png", nwi.DNS1));
+                                    }
+                                    if (!string.IsNullOrEmpty(nwi.DNS2) && nwi.DNS2.Length > 0)
+                                    {
+                                        net_list_info.Add(new NetWork("备用DNS地址", "..\\Resources\\ethernet_32px.png", nwi.DNS2));
+                                    }
                                 }
-                                if(!string.IsNullOrEmpty(nwi.Mask) && nwi.Mask.Length > 0)
-                                {
-                                    net_list_info.Add(new NetWork("子网掩码", "..\\Resources\\ethernet_32px.png", nwi.Mask));
-                                }
-                                if(!string.IsNullOrEmpty(nwi.GateWay) && nwi.GateWay.Length > 0)
-                                {
-                                    net_list_info.Add(new NetWork("网关地址", "..\\Resources\\ethernet_32px.png", nwi.GateWay));
-                                }
-                                if(!string.IsNullOrEmpty(nwi.DNS1) && nwi.DNS1.Length > 0)
-                                {
-                                    net_list_info.Add(new NetWork("主DNS地址", "..\\Resources\\ethernet_32px.png", nwi.DNS1));
-                                }
-                                if(!string.IsNullOrEmpty(nwi.DNS2) && nwi.DNS2.Length > 0)
-                                {
-                                    net_list_info.Add(new NetWork("备用DNS地址", "..\\Resources\\ethernet_32px.png", nwi.DNS2));
-                                }
+                                
 
                                 net_list_info.Add(new NetWork("网络适配器制造商", "..\\Resources\\ethernet_32px.png"));
                                 string Manufacturer = m.Properties["Manufacturer"].Value.ToString();
@@ -588,28 +580,74 @@ namespace QTest.Tools
             }
         }
 
+        public static string GetIPv4Address(string adapterName)
+        {
+            String IPAddress = String.Empty;
+            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
+            try
+            {
+                foreach (NetworkInterface adapter in adapters)
+                {
+                    if (adapter.Description.Equals(adapterName))
+                    {
+                        UnicastIPAddressInformationCollection unicastIPAddressInformation = adapter.GetIPProperties().UnicastAddresses;
+                        if (unicastIPAddressInformation.Count > 0)
+                        {
+                            foreach (var item in unicastIPAddressInformation)
+                            {
+                                if (item.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                                {
+                                    IPAddress = item.Address.ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+                return IPAddress;
+            }
+            catch (Exception)
+            {
+                return String.Empty;
+            }
+        }
+
         public static NetWorkInfo GetNetWorkInfoForAdapter(string adapterName)
         {
             NetWorkInfo nwi = null;
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
             foreach(NetworkInterface adapter in nics)
             {
-                //判断是否以太网连接
+                //太网连接
                 bool isEthernet = (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet);
-                Console.WriteLine(adapter.Name +" " + adapter.Description + " " + isEthernet);
-                if(isEthernet && adapter.Description.Equals(adapterName))
+                //无线连接
+                bool isWireless = (adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211);
+                Console.WriteLine("Name:"+adapter.Name + " Description:" + adapter.Description + 
+                    " isEthernet:" + isEthernet + " isWireless:" + isWireless);
+                if((isEthernet || isWireless) && adapter.Description.Equals(adapterName))
                 {
                     nwi = new NetWorkInfo();
                     nwi.Name = adapter.Name;
                     IPInterfaceProperties ip = adapter.GetIPProperties();
                     if(ip.UnicastAddresses.Count > 0)
                     {
-                        nwi.Ip = ip.UnicastAddresses[0].Address.ToString();
-                        nwi.Mask = ip.UnicastAddresses[0].IPv4Mask.ToString();
+                        foreach(var item in ip.UnicastAddresses)
+                        {
+                            if (item.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                            {
+                                nwi.Ip = item.Address.ToString();
+                                nwi.Mask = item.IPv4Mask.ToString();
+                            }
+                        }
                     }
                     if(ip.GatewayAddresses.Count > 0)
                     {
-                        nwi.GateWay = ip.GatewayAddresses[0].Address.ToString();
+                        foreach(var item in ip.GatewayAddresses)
+                        {
+                            if (item.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                            {
+                                nwi.GateWay = item.Address.ToString();
+                            }
+                        }
                     }
                     int DnsCount = ip.DnsAddresses.Count;
                     Console.WriteLine("DnsCount:"+ DnsCount);

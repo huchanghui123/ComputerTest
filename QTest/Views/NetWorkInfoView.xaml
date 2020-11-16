@@ -35,7 +35,7 @@
                   Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Grid.ColumnSpan="5" SelectionChanged="NetWorkView_SelectionChanged">
             <ListView.View>
                 <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnStyle}">
-                    <GridViewColumn Header="网络设备描述" Width="400">
+                    <GridViewColumn Header="网络设备描述" Width="500">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

@@ -54,7 +54,7 @@ namespace QTest.Views
             NetWork network = netList.SelectedItem as NetWork;
             Console.WriteLine(network.NetDevice);
 
-            ComputerTool.GetNetWorkInfoForAdapter(network.NetDevice);
+            //ComputerTool.GetNetWorkInfoForAdapter(network.NetDevice);
 
             networkInfoList = ComputerTool.GetNetWorkAdpterInfo(network.NetDevice);
             if (networkInfoList != null)
