@@ -10,6 +10,8 @@ namespace QTest.instances
     {
         //连接名称
         public string Name { get; set; }
+        //类型
+        public string Type { get; set; }
         //ip地址
         public string Ip { get; set; }
         //子网掩码
@@ -18,9 +20,10 @@ namespace QTest.instances
         public string GateWay { get; set; }
         //主DNS地址
         public string DNS1 { get; set; }
-        //备DNS地址
+        //备DNS地址ype
         public string DNS2 { get; set; }
         //连接速度
         public string Speed { get; set; }
+
     }
 }

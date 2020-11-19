@@ -358,7 +358,6 @@ namespace QTest.Tools
                 int flag = 0;
                 string status = String.Empty;
                 bool netEnabled = false;
-                string ipaddress = String.Empty;
                 string temp = String.Empty;
                 foreach (ManagementObject m in moc)
                 {
@@ -371,7 +370,8 @@ namespace QTest.Tools
                     }
 
                     temp += type + " " + m.Properties["PhysicalAdapter"].Value.ToString() + "\r\n";
-                    //Console.WriteLine(type + " " +  m.Properties["PhysicalAdapter"].Value.ToString());
+                    Console.WriteLine(type + " " + m.Properties["PhysicalAdapter"].Value.ToString());
+                    
                     if (type.Length>3 && 
                         (type.Substring(0,3) == "PCI"|| 
                         type.Substring(0, 3) == "USB"|| 
@@ -385,45 +385,65 @@ namespace QTest.Tools
                             flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
                             netEnabled = Convert.ToBoolean(m.Properties["NetEnabled"].Value);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
+                            Console.WriteLine(e.ToString());
+                        }
+                        NetWorkInfo nwi = GetNetWorkInfoForAdapter(Name);
+                        if (nwi != null)
+                        {
+                            if (type.Substring(0, 3) == "PCI")
+                            {
+                                if(nwi.Type.ToLower().IndexOf("wireless") > -1)
+                                {
+                                    net_list.Add(new BaseData("PCI无线网卡", "..\\Resources\\WIFI_32px.png", 0));
+                                }
+                                else
+                                {
+                                    net_list.Add(new BaseData("PCI有线网卡", "..\\Resources\\Network.png", 0));
+                                }
+                                
+                            }
+                            else if (type.Substring(0, 3) == "USB")
+                            {
+                                if (nwi.Type.ToLower().IndexOf("wireless") > -1)
+                                {
+                                    net_list.Add(new BaseData("USB无线网卡", "..\\Resources\\WIFI_32px.png", 0));
+                                }
+                                else
+                                {
+                                    net_list.Add(new BaseData("USB有线网卡", "..\\Resources\\Network.png", 0));
+                                }
+                                    
+                            }
+                            else if (type.Substring(0, 3) == "BTH")
+                            {
+                                net_list.Add(new BaseData("蓝牙适配器", "..\\Resources\\Bluetooth_32px.png", 0));
+                            }
+
+                            net_list.Add(new BaseData("适配器", Name));
+                            net_list.Add(new BaseData("MAC", MACAddress));
+
+                            switch (flag)
+                            {
+                                case 2:
+                                    status = "已连接";
+                                    break;
+                                case 7:
+                                    status = "已断开";
+                                    break;
+                                default:
+                                    status = "已断开";
+                                    break;
+                            }
+                            net_list.Add(new BaseData("状态", status));
+
+                            if (netEnabled)
+                            {
+                                net_list.Add(new BaseData("IPv4地址", nwi.Ip));
+                            }
                         }
                         
-                        if(type.Substring(0, 3) == "PCI")
-                        {
-                            net_list.Add(new BaseData("PCI物理网卡", "..\\Resources\\Network.png", 0));
-                        }
-                        else if(type.Substring(0, 3) == "USB")
-                        {
-                            net_list.Add(new BaseData("USB物理网卡", "..\\Resources\\Network.png", 0));
-                        }
-                        else if (type.Substring(0, 3) == "BTH")
-                        {
-                            net_list.Add(new BaseData("蓝牙适配器", "..\\Resources\\Network.png", 0));
-                        }
-                        
-                        net_list.Add(new BaseData("适配器", Name));
-                        net_list.Add(new BaseData("MAC", MACAddress));
-                        
-                        switch (flag)
-                        {
-                            case 2:
-                                status = "已连接";
-                                break;
-                            case 7:
-                                status = "已断开";
-                                break;
-                            default:
-                                status = "已断开";
-                                break;
-                        }
-                        net_list.Add(new BaseData("状态", status));
-                        
-                        if (netEnabled)
-                        {
-                            ipaddress = GetIPv4Address(Name);
-                            net_list.Add(new BaseData("IPv4地址", ipaddress));
-                        }
                     }
                 }
                 //MessageBox.Show(temp);
@@ -438,9 +458,6 @@ namespace QTest.Tools
                 return null;
             }
         }
-
-        
-
 
         public static List<NetWork> GetNetWorkAdpter()
         {
@@ -498,11 +515,11 @@ namespace QTest.Tools
                                 NetWorkInfo nwi = GetNetWorkInfoForAdapter(adapter);
 
                                 net_list_info.Add(new NetWork("网络适配器信息", "..\\Resources\\ethernet_32px.png"));
-                                net_list_info.Add(new NetWork("网络适配器", "..\\Resources\\ethernet_32px.png", name)); 
-                                net_list_info.Add(new NetWork("接口类型", "..\\Resources\\ethernet_32px.png", m.Properties["AdapterType"].Value.ToString()));
-                                net_list_info.Add(new NetWork("硬件地址(MAC)", "..\\Resources\\ethernet_32px.png", m.Properties["MACAddress"].Value.ToString()));
-                                if(nwi != null)
+                                net_list_info.Add(new NetWork("网络适配器", "..\\Resources\\ethernet_32px.png", name));
+                                if (nwi != null)
                                 {
+                                    net_list_info.Add(new NetWork("接口类型", "..\\Resources\\ethernet_32px.png", nwi.Type));
+                                    net_list_info.Add(new NetWork("硬件地址(MAC)", "..\\Resources\\ethernet_32px.png", m.Properties["MACAddress"].Value.ToString()));
                                     net_list_info.Add(new NetWork("连接名称", "..\\Resources\\ethernet_32px.png", nwi.Name));
 
                                     int flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
@@ -545,6 +562,11 @@ namespace QTest.Tools
                                     net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.vmware.com"));
                                     net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "https://www.vmware.com"));
                                 }
+                                else if(Manufacturer.ToLower().IndexOf("virtual") > -1)
+                                {
+                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.virtualbox.org"));
+                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "https://www.virtualbox.org"));
+                                }
                                 else if (Manufacturer.ToLower().IndexOf("intel") > -1)
                                 {
                                     net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.intel.com/content/www/us/en/products/network-io.html"));
@@ -552,19 +574,16 @@ namespace QTest.Tools
                                 }
                                 else if (Manufacturer.ToLower().IndexOf("realtek") > -1)
                                 {
-                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.realtek.com/zh-tw/products/communications-network-ics"));
-                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "https://www.realtek.com/zh-tw/component/zoo/advanced-search/26?Itemid=283"));
+                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "https://www.realtek.com/products"));
+                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "https://www.realtek.com/downloads"));
                                 }
                                 else
                                 {
-                                    net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "unknow"));
-                                    net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "unknow"));
+                                    //net_list_info.Add(new NetWork("产品信息", "..\\Resources\\ethernet_32px.png", "unknow"));
+                                    //net_list_info.Add(new NetWork("驱动程序下载", "..\\Resources\\ethernet_32px.png", "unknow"));
                                 }
-                                
                             }
-                            
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -577,37 +596,6 @@ namespace QTest.Tools
             catch (Exception)
             {
                 return null;
-            }
-        }
-
-        public static string GetIPv4Address(string adapterName)
-        {
-            String IPAddress = String.Empty;
-            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
-            try
-            {
-                foreach (NetworkInterface adapter in adapters)
-                {
-                    if (adapter.Description.Equals(adapterName))
-                    {
-                        UnicastIPAddressInformationCollection unicastIPAddressInformation = adapter.GetIPProperties().UnicastAddresses;
-                        if (unicastIPAddressInformation.Count > 0)
-                        {
-                            foreach (var item in unicastIPAddressInformation)
-                            {
-                                if (item.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                                {
-                                    IPAddress = item.Address.ToString();
-                                }
-                            }
-                        }
-                    }
-                }
-                return IPAddress;
-            }
-            catch (Exception)
-            {
-                return String.Empty;
             }
         }
 
@@ -627,6 +615,21 @@ namespace QTest.Tools
                 {
                     nwi = new NetWorkInfo();
                     nwi.Name = adapter.Name;
+                    if (isEthernet)
+                    {
+                        if(adapter.Description.ToLower().IndexOf("bluetooth") > -1)
+                        {
+                            nwi.Type = "Bluetooth Ethernet";
+                        }
+                        else
+                        {
+                            nwi.Type = "Gigabit Ethernet";
+                        }
+                    }
+                    if (isWireless)
+                    {
+                        nwi.Type = "802.11 Wireless Ethernet";
+                    }
                     IPInterfaceProperties ip = adapter.GetIPProperties();
                     if(ip.UnicastAddresses.Count > 0)
                     {
@@ -650,7 +653,6 @@ namespace QTest.Tools
                         }
                     }
                     int DnsCount = ip.DnsAddresses.Count;
-                    Console.WriteLine("DnsCount:"+ DnsCount);
                     if(DnsCount == 1)
                     {
                         nwi.DNS1 = ip.DnsAddresses[0].ToString();
@@ -663,6 +665,27 @@ namespace QTest.Tools
                 }
             }
             return nwi;
+        }
+
+        public static bool AdapterIsWireless(String adapterName)
+        {
+            bool isWireless =  false;
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface adapter in nics)
+            {
+                if(adapter.Description.Equals(adapterName))
+                {
+                    if(adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                    {
+                        isWireless = false;
+                    }
+                    else if(adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                    {
+                        isWireless = true;
+                    }
+                }
+            }
+            return isWireless;
         }
 
     }

@@ -273,5 +273,9 @@
   <ItemGroup>
     <Resource Include="Resources\ethernet_32px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Bluetooth_32px.png" />
+    <Resource Include="Resources\WIFI_32px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
