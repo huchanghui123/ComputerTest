@@ -149,10 +149,13 @@ namespace QTest.Views
             Console.WriteLine("SerialPort_DataReceived...");
             SerialPort serialPort1 = (SerialPort)sender;
             byte[] ReDatas = new byte[serialPort1.BytesToRead];
-            
             try
             {
                 indata = serialPort1.ReadLine();
+            }
+            catch(TimeoutException)
+            {
+                indata = "";
             }
             catch (Exception ex)
             {

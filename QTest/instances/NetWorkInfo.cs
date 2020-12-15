@@ -18,6 +18,8 @@ namespace QTest.instances
         public string Mask { get; set; }
         //网关地址
         public string GateWay { get; set; }
+        //MAC地址
+        public string Mac { get; set; }
         //主DNS地址
         public string DNS1 { get; set; }
         //备DNS地址ype

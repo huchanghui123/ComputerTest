@@ -333,9 +333,9 @@ namespace QTest.Views
                 if(!serialPort.IsOpen)
                 { return; }
                 message = serialPort.ReadLine();
-                Console.WriteLine("recevieName:"+ recevieName + " Received data:" + message);
-                sb.Clear();
-                sb.Append(message);
+                //Console.WriteLine("recevieName:"+ recevieName + " Received data:" + message);
+                //sb.Clear();
+                //sb.Append(message);
                 this.Dispatcher.BeginInvoke((Action)delegate () {
                     foreach (StackPanel recevie_panel in recevie_panel_list)
                     {
@@ -345,7 +345,7 @@ namespace QTest.Views
                         {
                             TextBox tv = (TextBox)recevie_panel.Children[1];
                             //Console.WriteLine("recevie_panel textBox name:{0}", tv.Name);
-                            tv.AppendText(sb.ToString());
+                            tv.AppendText(message);
                             tv.ScrollToEnd();
                         }
                     }
@@ -417,7 +417,7 @@ namespace QTest.Views
                             dcd.Background = Brushes.LightGray;
                         }
                     });
-                    System.Threading.Thread.Sleep(10);
+                    //System.Threading.Thread.Sleep(10);
                 }
                 catch (Exception ex)
                 {

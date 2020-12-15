@@ -290,7 +290,15 @@ namespace QTest.Tools
                     //    Convert.ToInt32(m.Properties["Speed"].Value) + " " +
                     //    Convert.ToDouble(m.Properties["Capacity"].Value));
                     mem_list.Add(new BaseData(m.Properties["Name"].Value.ToString(), "..\\Resources\\memory.png", 0));
-                    mem_list.Add(new BaseData("厂家", m.Properties["Manufacturer"].Value.ToString()));
+                    if (m.Properties["Manufacturer"].Value.Equals("0710") ||
+                        m.Properties["Manufacturer"].Value.Equals("1310"))
+                    {
+                        mem_list.Add(new BaseData("厂家", "Kimtigo"));
+                    }
+                    else
+                    {
+                        mem_list.Add(new BaseData("厂家", m.Properties["Manufacturer"].Value.ToString()));
+                    }
                     mem_list.Add(new BaseData("主频", m.Properties["Speed"].Value.ToString()+" MHz"));
                     capacity = Convert.ToDouble(m.Properties["Capacity"].Value);
                     size = (capacity / 1024 / 1024 / 1024).ToString("f1") + " GB";
@@ -358,7 +366,7 @@ namespace QTest.Tools
                 int flag = 0;
                 string status = String.Empty;
                 bool netEnabled = false;
-                string temp = String.Empty;
+                //string temp = String.Empty;
                 foreach (ManagementObject m in moc)
                 {
                     try
@@ -369,8 +377,8 @@ namespace QTest.Tools
                     {
                     }
 
-                    temp += type + " " + m.Properties["PhysicalAdapter"].Value.ToString() + "\r\n";
-                    Console.WriteLine(type + " " + m.Properties["PhysicalAdapter"].Value.ToString());
+                    //temp += type + " " + m.Properties["PhysicalAdapter"].Value.ToString() + "\r\n";
+                    //Console.WriteLine(type + " " + m.Properties["PhysicalAdapter"].Value.ToString());
                     
                     if (type.Length>3 && 
                         (type.Substring(0,3) == "PCI"|| 
@@ -443,7 +451,6 @@ namespace QTest.Tools
                                 net_list.Add(new BaseData("IPv4地址", nwi.Ip));
                             }
                         }
-                        
                     }
                 }
                 //MessageBox.Show(temp);
@@ -472,10 +479,24 @@ namespace QTest.Tools
                 {
                     try
                     {
-                        string adpter = m.Properties["Name"].Value.ToString();
+                        adapter = m.Properties["Name"].Value.ToString();
                         if (Boolean.Parse(m.Properties["PhysicalAdapter"].Value.ToString()) == true)
                         {
-                            net_list.Add(new NetWork(adpter, "..\\Resources\\ethernet_32px.png"));
+                            if(AdapterIsWireless(adapter))
+                            {
+                                net_list.Add(new NetWork(adapter, "..\\Resources\\WIFI_32px.png"));
+                            }
+                            else
+                            {
+                                if (adapter.ToLower().IndexOf("bluetooth") > -1)
+                                {
+                                    net_list.Add(new NetWork(adapter, "..\\Resources\\Bluetooth_32px.png"));
+                                }
+                                else
+                                {
+                                    net_list.Add(new NetWork(adapter, "..\\Resources\\ethernet_32px.png"));
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -491,7 +512,6 @@ namespace QTest.Tools
                 return null;
             }
         }
-
 
         public static List<NetWork> GetNetWorkAdpterInfo(string adapter)
         {
@@ -519,7 +539,8 @@ namespace QTest.Tools
                                 if (nwi != null)
                                 {
                                     net_list_info.Add(new NetWork("接口类型", "..\\Resources\\ethernet_32px.png", nwi.Type));
-                                    net_list_info.Add(new NetWork("硬件地址(MAC)", "..\\Resources\\ethernet_32px.png", m.Properties["MACAddress"].Value.ToString()));
+                                    //net_list_info.Add(new NetWork("硬件地址(MAC)", "..\\Resources\\ethernet_32px.png", m.Properties["MACAddress"].Value.ToString()));
+                                    net_list_info.Add(new NetWork("硬件地址(MAC)", "..\\Resources\\ethernet_32px.png", nwi.Mac));
                                     net_list_info.Add(new NetWork("连接名称", "..\\Resources\\ethernet_32px.png", nwi.Name));
 
                                     int flag = Convert.ToUInt16(m.Properties["NetConnectionStatus"].Value);
@@ -613,8 +634,11 @@ namespace QTest.Tools
                     " isEthernet:" + isEthernet + " isWireless:" + isWireless);
                 if((isEthernet || isWireless) && adapter.Description.Equals(adapterName))
                 {
-                    nwi = new NetWorkInfo();
-                    nwi.Name = adapter.Name;
+                    nwi = new NetWorkInfo
+                    {
+                        Name = adapter.Name,
+                        Mac = adapter.GetPhysicalAddress().ToString()
+                    };
                     if (isEthernet)
                     {
                         if(adapter.Description.ToLower().IndexOf("bluetooth") > -1)
